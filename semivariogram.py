@@ -6,6 +6,7 @@ import numpy as np
 import skgstat as skg
 import ast
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 
 load_dotenv()
 
@@ -32,11 +33,12 @@ low_all_plots = all_data[all_data["Stratum"] == '0-30']
 high_all_plots = all_data[all_data["Stratum"] == '30-100']
 
 # prepare coordinates and values for input
-x_coords, y_coords = zip(*low_all_plots["Coordinates"])
+x_coords, y_coords = zip(*macroplot1_low["Coordinates"])
 coords = np.array([x_coords, y_coords]).T
-values = np.array(low_all_plots["PN"])
-print(coords.shape)
+values = np.array(macroplot1_low["ETE"])
 
 vgram = skg.Variogram(coordinates=coords, values=values, fit_method='trf')
+vgram.distance_difference_plot()
 var_plot = vgram.plot()
 plt.show(block=True)
+
