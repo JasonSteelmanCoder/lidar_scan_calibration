@@ -3,10 +3,8 @@ import os
 from dotenv import load_dotenv
 import pandas as pd
 import numpy as np
-import skgstat as skg
 import ast
-import matplotlib.pyplot as plt
-from scipy.optimize import curve_fit
+from pykrige.ok import OrdinaryKriging
 
 load_dotenv()
 
@@ -30,11 +28,9 @@ macroplot3_high = all_data[(all_data["Macroplot"] == 3) & (all_data["Stratum"] =
 
 # prepare coordinates and values for input
 x_coords, y_coords = zip(*macroplot1_low["Coordinates"])
-coords = np.array([x_coords, y_coords]).T
+x_coords = np.array(x_coords)
+y_coords = np.array(y_coords)
 values = np.array(macroplot1_low["ETE"])
 
-vgram = skg.Variogram(coordinates=coords, values=values, fit_method='trf')
-vgram.distance_difference_plot()
-var_plot = vgram.plot()
-plt.show(block=True)
-
+OK = OrdinaryKriging(x_coords, y_coords, values, variogram_model='spherical')
+OK.display_variogram_model()
