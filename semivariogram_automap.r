@@ -1,4 +1,4 @@
-library(gstat)
+library(automap)
 library(sp)
 library(dplyr)
 library(stringr)
@@ -11,13 +11,16 @@ file_data$Y <- as.numeric(str_extract(file_data$Coordinates, "((-)?\\d+(\\.\\d+)
 
 macroplot1_low <- subset(file_data, Macroplot == 1 & Stratum == '0-30')
 
-coordinates(macroplot1_low) <- ~X+Y
+spatial_df <- SpatialPointsDataFrame(
+  coords = macroplot1_low[, c("X", "Y")],
+  data = data.frame(macroplot1_low[, "ETE"])
+)
 
-v <- variogram(ETE~1, macroplot1_low, cutoff = 13)
-plot(v)
+print(spatial_df)
 
-v.model <- vgm(psill = 170, model = "Sph", range = 0.5, nugget = 140)
-v.fit <- fit.variogram(v, v.model, fit.method = 2)      
-print(v.model)
-plot(v.model, cutoff = 13)
+print(spatial_df$macroplot1_low....ETE..)
+
+variogram = autofitVariogram(formula = macroplot1_low....ETE..~1, input_data = spatial_df, verbose = TRUE, miscFitOptions = list(merge.small.bins = FALSE))
+plot(variogram)
+print(variogram)
 
