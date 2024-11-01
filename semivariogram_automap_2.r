@@ -75,7 +75,8 @@ for (type in biomass_types) {
         the_plot$main = clean_data_name
         plot(the_plot)
       }, error = function(e) {
-        plot(1, 1, main = clean_data_name)
+        plot(1, 1, main = clean_data_name, type = 'n', ylab = "", xlab = "")
+        text(x = 1, y = 1, labels = "biomass not found for this category", col = 'darkgrey')
         print(e)
       })
     dev.off()
