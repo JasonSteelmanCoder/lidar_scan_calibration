@@ -20,6 +20,7 @@ macroplot2_high <- subset(file_data, Macroplot == 2 & Stratum == '30-100')
 macroplot3_high <- subset(file_data, Macroplot == 3 & Stratum == '30-100')
 
 biomass_types <- names(file_data)[5:15]
+print(biomass_types)
 
 k <- 1
 
@@ -96,7 +97,7 @@ for (type in biomass_types) {
   }
   
   full_set <- image_append(c(combined_high_image, combined_low_image), stack = TRUE)
-  image_write(full_set, path = glue("full_set",  k, ".png"))
+  image_write(full_set, path = glue(biomass_type, ".png"))
   k <- k + 1
 
 }
