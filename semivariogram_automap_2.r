@@ -75,7 +75,7 @@ for (type in biomass_types) {
         the_plot$main = clean_data_name
         plot(the_plot)
       }, error = function(e) {
-        plot(1, 1)
+        plot(1, 1, main = clean_data_name)
         print(e)
       })
     dev.off()
