@@ -71,7 +71,9 @@ for (type in biomass_types) {
     png(filename = paste(clean_data_name, ".png", sep = ''))
       variogram = autofitVariogram(formula = formula, input_data = plot_layers[[i]], verbose = FALSE, miscFitOptions = list(merge.small.bins = TRUE))
       tryCatch({
-        plot(variogram, sub = clean_data_name, multipanel = TRUE)
+        the_plot <- plot(variogram, multipanel = TRUE)
+        the_plot$main = clean_data_name
+        plot(the_plot)
       }, error = function(e) {
         plot(1, 1)
         print(e)
@@ -97,7 +99,7 @@ for (type in biomass_types) {
   }
   
   full_set <- image_append(c(combined_high_image, combined_low_image), stack = TRUE)
-  image_write(full_set, path = glue(biomass_type, ".png"))
+  image_write(full_set, path = glue("variograms_", biomass_type, ".png"))
   k <- k + 1
 
 }
