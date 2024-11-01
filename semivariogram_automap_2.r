@@ -3,6 +3,7 @@ library(sp)
 library(dplyr)
 library(stringr)
 library(png)
+library(magick)
 
 input.csv <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/HEF Biomass 2024.csv'
 file_data <- read.csv(input.csv)
@@ -62,9 +63,28 @@ for (layer in plot_layers) {
   
 }
 
+low_png_files <- list.files(pattern = "^macroplot\\w*low\\w*.png$")
+low_images <- image_join(lapply(low_png_files, image_read))
+combined_low_image <- image_append(low_images)
+#image_write(combined_low_image, path = 'combined_low_plots.png')
+for (file in low_png_files) {
+  file.remove(file)
+}
+
+high_png_files <- list.files(pattern = "^macroplot\\w*high\\w*.png$")
+high_images <- image_join(lapply(high_png_files, image_read))
+combined_high_image <- image_append(high_images)
+#image_write(combined_high_image, path = 'combined_high_plots.png')
+for (file in high_png_files) {
+  file.remove(file)
+}
+
+full_set <- image_append(c(combined_high_image, combined_low_image), stack = TRUE)
+image_write(full_set, path = "full_set.png")
 
 #methods("plot")
 #getAnywhere("plot.variogramMap")
+
 #setwd("C:/Users/js81535/Desktop/lidar_scan_calibration/")
 #getwd()
 #dev.list()
