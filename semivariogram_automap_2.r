@@ -2,6 +2,7 @@ library(automap)
 library(sp)
 library(dplyr)
 library(stringr)
+library(png)
 
 input.csv <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/HEF Biomass 2024.csv'
 file_data <- read.csv(input.csv)
@@ -21,7 +22,7 @@ spatial_df1_low <- SpatialPointsDataFrame(
   data = data.frame(macroplot1_low[, "ETE"])
 )
 
-spatial_df1_low <- SpatialPointsDataFrame(
+spatial_df2_low <- SpatialPointsDataFrame(
   coords = macroplot2_low[, c("X", "Y")],
   data = data.frame(macroplot2_low[, "ETE"])
 )
@@ -48,19 +49,26 @@ spatial_df3_high <- SpatialPointsDataFrame(
 
 plot_layers = c(spatial_df1_low, spatial_df2_low, spatial_df3_low, spatial_df1_high, spatial_df2_high, spatial_df3_high)
 
-pdf("ETE_plots.pdf")
-par(mfrow = c(2, 3))
-
 for (layer in plot_layers) {
   data_name <- names(layer)[1]
   formula <- as.formula(paste(data_name, '~ 1'))
 
-  variogram = autofitVariogram(formula = formula, input_data = layer, verbose = FALSE, miscFitOptions = list(merge.small.bins = TRUE))
-  plot(variogram, sub = names(layer))
-  #print(variogram)
+  clean_data_name <- gsub("\\.+", "_", data_name)
+  print(clean_data_name)
+  png(filename = paste(clean_data_name, ".png", sep = ''))
+    variogram = autofitVariogram(formula = formula, input_data = layer, verbose = FALSE, miscFitOptions = list(merge.small.bins = TRUE))
+    plot(variogram, sub = names(layer), multipanel = TRUE)
+  dev.off()
+  
 }
 
-dev.off()
 
-
+#methods("plot")
+#getAnywhere("plot.variogramMap")
+#setwd("C:/Users/js81535/Desktop/lidar_scan_calibration/")
+#getwd()
+#dev.list()
+#dev.new()
+#dev.set(2)
+#dev.off()
 
