@@ -17,26 +17,26 @@ macroplot1_y_offset = -7.2117
 macroplot2_x_offset = 27.7773
 macroplot2_y_offset = 15.3972
 
-input_df = pd.read_csv(input_file)
+df = pd.read_csv(input_file)
 
 xs = []
 ys = []
-for row in input_df["Coordinates"]:
+for row in df["Coordinates"]:
     coord_list = literal_eval(row)
     xs.append(coord_list[0])
     ys.append(coord_list[1])
 
-input_df["multiplot_x"] = xs
-input_df["multiplot_y"] = ys
+df["multiplot_x"] = xs
+df["multiplot_y"] = ys
 
-input_df.loc[input_df["Macroplot"] == 1, 'multiplot_x'] += macroplot1_x_offset
-input_df.loc[input_df["Macroplot"] == 1, 'multiplot_y'] += macroplot1_y_offset
-input_df.loc[input_df["Macroplot"] == 2, 'multiplot_x'] += macroplot2_x_offset
-input_df.loc[input_df["Macroplot"] == 2, 'multiplot_y'] += macroplot2_y_offset
+df.loc[df["Macroplot"] == 1, 'multiplot_x'] += macroplot1_x_offset
+df.loc[df["Macroplot"] == 1, 'multiplot_y'] += macroplot1_y_offset
+df.loc[df["Macroplot"] == 2, 'multiplot_x'] += macroplot2_x_offset
+df.loc[df["Macroplot"] == 2, 'multiplot_y'] += macroplot2_y_offset
 
-print(input_df)
+print(df)
 
 # plt.scatter(input_df["multiplot_x"], input_df["multiplot_y"])
 # plt.show()
 
-input_df.to_csv(output_file)
+df.to_csv(output_file)
