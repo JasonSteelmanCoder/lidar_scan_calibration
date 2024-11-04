@@ -79,7 +79,6 @@ for (type in biomass_types) {
 
 #methods("plot")
 #getAnywhere("plot.variogramMap")
-
 #setwd("C:/Users/js81535/Desktop/lidar_scan_calibration/")
 #getwd()
 #dev.list()
