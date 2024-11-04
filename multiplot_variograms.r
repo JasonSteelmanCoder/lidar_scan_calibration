@@ -13,7 +13,7 @@ low_stratum <- subset(file_data, Stratum == '0-30')
 high_stratum <- subset(file_data, Stratum == '30-100')
 
 biomass_types <- names(file_data)[5:15]
-print(biomass_types)
+# print(biomass_types)
 
 k <- 1
 
@@ -21,42 +21,21 @@ for (type in biomass_types) {
   
   biomass_type = type
   
-  spatial_df1_low <- SpatialPointsDataFrame(
-    coords = macroplot1_low[, c("X", "Y")],
-    data = subset(macroplot1_low, select = biomass_type)
+  spatial_low <- SpatialPointsDataFrame(
+    coords = low_stratum[, c("multiplot_x", "multiplot_y")],
+    data = subset(low_stratum, select = biomass_type)
   )
   
-  spatial_df2_low <- SpatialPointsDataFrame(
-    coords = macroplot2_low[, c("X", "Y")],
-    data = subset(macroplot2_low, select = biomass_type)
-  )
-  
-  spatial_df3_low <- SpatialPointsDataFrame(
-    coords = macroplot3_low[, c("X", "Y")],
-    data = subset(macroplot3_low, select = biomass_type)
-  )
-  
-  spatial_df1_high <- SpatialPointsDataFrame(
-    coords = macroplot1_high[, c("X", "Y")],
-    data = subset(macroplot1_high, select = biomass_type)
-  )
-  
-  spatial_df2_high <- SpatialPointsDataFrame(
-    coords = macroplot2_high[, c("X", "Y")],
-    data = subset(macroplot2_high, select = biomass_type)
-  )
-  
-  spatial_df3_high <- SpatialPointsDataFrame(
-    coords = macroplot3_high[, c("X", "Y")],
-    data = subset(macroplot3_high, select = biomass_type)
+  spatial_high <- SpatialPointsDataFrame(
+    coords = high_stratum[, c("multiplot_x", "multiplot_y")],
+    data = subset(high_stratum, select = biomass_type)
   )
   
   
+  plot_layers = c(spatial_low, spatial_high)
+  plot_layer_names = c("low_stratum_", "high_stratum_")
   
-  plot_layers = c(spatial_df1_low, spatial_df2_low, spatial_df3_low, spatial_df1_high, spatial_df2_high, spatial_df3_high)
-  plot_layer_names = c("macroplot1_low_", "macroplot2_low_", "macroplot3_low_", "macroplot1_high_", "macroplot2_high_", "macroplot3_high_")
-  
-  for (i in 1:6) {
+  for (i in 1:2) {
     data_name <- names(plot_layers[[i]])[1]
     formula <- as.formula(paste(data_name, '~ 1'))
     
@@ -70,13 +49,13 @@ for (type in biomass_types) {
     }, error = function(e) {
       plot(1, 1, main = clean_data_name, type = 'n', ylab = "", xlab = "")
       text(x = 1, y = 1, labels = "biomass not found for this category", col = 'darkgrey')
-      print(e)
+      #print(e)
     })
     dev.off()
     
   }
   
-  low_png_files <- list.files(pattern = "^macroplot\\w*low\\w*.png$")
+  low_png_files <- list.files(pattern = "^low_stratum_\\w*.png$")
   low_images <- image_join(lapply(low_png_files, image_read))
   combined_low_image <- image_append(low_images)
   #image_write(combined_low_image, path = 'combined_low_plots.png')
@@ -84,7 +63,7 @@ for (type in biomass_types) {
     file.remove(file)
   }
   
-  high_png_files <- list.files(pattern = "^macroplot\\w*high\\w*\\.png$")
+  high_png_files <- list.files(pattern = "^high_stratum\\w*\\.png$")
   high_images <- image_join(lapply(high_png_files, image_read))
   combined_high_image <- image_append(high_images)
   #image_write(combined_high_image, path = 'combined_high_plots.png')
@@ -93,7 +72,7 @@ for (type in biomass_types) {
   }
   
   full_set <- image_append(c(combined_high_image, combined_low_image), stack = TRUE)
-  image_write(full_set, path = glue("variograms_", biomass_type, ".png"))
+  image_write(full_set, path = glue("multiplot_variograms_", biomass_type, ".png"))
   k <- k + 1
   
 }
