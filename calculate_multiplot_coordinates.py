@@ -1,0 +1,40 @@
+# this script finds and records the multi-plot coordinates of all clipplots 
+# by translating the single-plot coordinates of macroplots 2 and 3 by the 
+# distances and directions of their centers from the center of macroplot 1.
+from dotenv import load_dotenv
+import os
+import pandas as pd
+from ast import literal_eval
+import matplotlib.pyplot as plt
+
+load_dotenv()
+
+input_file = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024.csv'
+output_file = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024 multiplot.csv'
+
+macroplot2_x_offset = 31.76
+macroplot2_y_offset = 0
+macroplot3_x_offset = 22
+macroplot3_y_offset = -20.11
+
+input_df = pd.read_csv(input_file)
+
+xs = []
+ys = []
+for row in input_df["Coordinates"]:
+    coord_list = literal_eval(row)
+    xs.append(coord_list[0])
+    ys.append(coord_list[1])
+
+input_df["multiplot_x"] = xs
+input_df["multiplot_y"] = ys
+
+input_df.loc[input_df["Macroplot"] == 2, 'multiplot_x'] += macroplot2_x_offset
+input_df.loc[input_df["Macroplot"] == 2, 'multiplot_y'] += macroplot2_y_offset
+input_df.loc[input_df["Macroplot"] == 3, 'multiplot_x'] += macroplot3_x_offset
+input_df.loc[input_df["Macroplot"] == 3, 'multiplot_y'] += macroplot3_y_offset
+
+print(input_df)
+
+plt.scatter(input_df["multiplot_x"], input_df["multiplot_y"])
+plt.show()
