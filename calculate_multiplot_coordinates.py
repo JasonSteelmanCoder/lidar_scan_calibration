@@ -12,10 +12,10 @@ load_dotenv()
 input_file = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024.csv'
 output_file = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024 multiplot.csv'
 
-macroplot2_x_offset = 31.76
-macroplot2_y_offset = 0
-macroplot3_x_offset = 22
-macroplot3_y_offset = -20.11
+macroplot1_x_offset = 28.9245
+macroplot1_y_offset = -7.2117
+macroplot2_x_offset = 27.7773
+macroplot2_y_offset = 15.3972
 
 input_df = pd.read_csv(input_file)
 
@@ -29,10 +29,10 @@ for row in input_df["Coordinates"]:
 input_df["multiplot_x"] = xs
 input_df["multiplot_y"] = ys
 
+input_df.loc[input_df["Macroplot"] == 1, 'multiplot_x'] += macroplot1_x_offset
+input_df.loc[input_df["Macroplot"] == 1, 'multiplot_y'] += macroplot1_y_offset
 input_df.loc[input_df["Macroplot"] == 2, 'multiplot_x'] += macroplot2_x_offset
 input_df.loc[input_df["Macroplot"] == 2, 'multiplot_y'] += macroplot2_y_offset
-input_df.loc[input_df["Macroplot"] == 3, 'multiplot_x'] += macroplot3_x_offset
-input_df.loc[input_df["Macroplot"] == 3, 'multiplot_y'] += macroplot3_y_offset
 
 print(input_df)
 
