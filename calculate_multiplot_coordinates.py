@@ -28,13 +28,15 @@ for row in input_df["Coordinates"]:
 
 input_df["multiplot_x"] = xs
 input_df["multiplot_y"] = ys
+input_df["color"] = "blue"
 
 input_df.loc[input_df["Macroplot"] == 1, 'multiplot_x'] += macroplot1_x_offset
 input_df.loc[input_df["Macroplot"] == 1, 'multiplot_y'] += macroplot1_y_offset
 input_df.loc[input_df["Macroplot"] == 2, 'multiplot_x'] += macroplot2_x_offset
 input_df.loc[input_df["Macroplot"] == 2, 'multiplot_y'] += macroplot2_y_offset
+input_df.loc[input_df["Macroplot"] == 1, 'color'] = "yellow"
 
 print(input_df)
 
-plt.scatter(input_df["multiplot_x"], input_df["multiplot_y"])
+plt.scatter(input_df["multiplot_x"], input_df["multiplot_y"], c=input_df["color"])
 plt.show()
