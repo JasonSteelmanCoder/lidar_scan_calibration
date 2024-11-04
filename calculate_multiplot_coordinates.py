@@ -39,4 +39,4 @@ print(df)
 # plt.scatter(input_df["multiplot_x"], input_df["multiplot_y"])
 # plt.show()
 
-df.to_csv(output_file)
+df.to_csv(output_file, index=False)
