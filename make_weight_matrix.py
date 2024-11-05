@@ -4,11 +4,14 @@ import os
 from dotenv import load_dotenv
 import pandas as pd
 import numpy as np
+import libpysal
+from esda.moran import Moran
 
 load_dotenv()
 
-# USER: set the stratum you want here ("0-30" or "30-100"). Below that, type in the location of your input csv file.
+# USER: set the stratum you want here ("0-30" or "30-100"). Type in the biomass type that you want. Below that, type in the location of your input csv file.
 stratum = "0-30" 
+biomass_type = "PC"
 input_file = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024 multiplot.csv'
 
 df = pd.read_csv(input_file)
@@ -56,4 +59,9 @@ for key, value in neighbors.items():
 
     weights[key] = distances
 
-print(weights)
+values = df.loc[df["Stratum"] == "0-30", biomass_type]
+
+weights_matrix = libpysal.weights.W(neighbors=neighbors, weights=weights)
+moran_obj = Moran(values, weights_matrix)
+
+print(moran_obj.I)
