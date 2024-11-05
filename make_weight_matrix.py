@@ -1,5 +1,6 @@
 # This script uses the biomass-multiplot data to make a dictionary of neighbors and a dictionary of distances. 
-# Those dictionaries can then be used in libpysal.weights.W to make Weights for use in esda.Moran
+# Those dictionaries are then used in libpysal.weights.W to make a weights matris. 
+# The weights matrix allows us to calculate Moran's I.
 import os
 from dotenv import load_dotenv
 import pandas as pd
@@ -65,3 +66,4 @@ weights_matrix = libpysal.weights.W(neighbors=neighbors, weights=weights)
 moran_obj = Moran(values, weights_matrix)
 
 print(moran_obj.I)
+print(moran_obj.p_norm)
