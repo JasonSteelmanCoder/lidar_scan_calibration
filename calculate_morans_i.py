@@ -17,7 +17,7 @@ biomass_type = "PN"
 # USER: Type in the location of your input csv file.
 input_file = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024 multiplot.csv'
 # USER: Type in the range that you want to filter by (as a float or int), or enter None to use pure distances
-autocorrelation_range = None
+autocorrelation_range = 10
 
 df = pd.read_csv(input_file)
 
@@ -49,7 +49,7 @@ for key, value in neighbors.items():
     key_y_series = df[(df["Macroplot"] == int(key_macroplot)) & (df["Clip Plot"] == key_clip_plot)]["multiplot_y"]
     key_y = key_y_series.iloc[0]
     
-    distances = []
+    distance_weights = []
     for j in range(len(macroplots)):
         neighbor_macroplot = macroplots[j]
         neighbor_clip_plot = clip_plots[j]
@@ -61,16 +61,14 @@ for key, value in neighbors.items():
 
         distance_to_neighbor = np.sqrt((neighbor_x - key_x)**2 + (neighbor_y - key_y)**2)
         if autocorrelation_range is None:
-            distances.append(1/distance_to_neighbor)
+            distance_weights.append(1 / distance_to_neighbor)
         else:
             if distance_to_neighbor < autocorrelation_range:
-                distances.append(1)
+                distance_weights.append(1)
             else:
-                distances.append(0)
+                distance_weights.append(0)
 
-    weights[key] = distances
-
-print(weights)
+    weights[key] = distance_weights
 
 values = df.loc[df["Stratum"] == "0-30", biomass_type]
 
@@ -83,4 +81,5 @@ weights_matrix = libpysal.weights.W(neighbors=neighbors, weights=weights)
 moran_obj = Moran(values, weights_matrix, transformation=transformation)
 
 print(moran_obj.I)
-print(moran_obj.p_norm)
+if autocorrelation_range is None:
+    print(moran_obj.p_norm)
