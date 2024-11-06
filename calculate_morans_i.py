@@ -72,12 +72,9 @@ for key, value in neighbors.items():
 
 values = df.loc[df["Stratum"] == "0-30", biomass_type]
 
-if autocorrelation_range is not None:
-    transformation = "B"
-else:
-    transformation = "r"
+transformation = "O"
 
-weights_matrix = libpysal.weights.W(neighbors=neighbors, weights=weights)
+weights_matrix = libpysal.weights.W(neighbors=neighbors, weights=weights, id_order=clip_plot_names)
 moran_obj = Moran(values, weights_matrix, transformation=transformation)
 
 print(moran_obj.I)
