@@ -4,8 +4,10 @@
 # On each plot, it will look at three rings at 2, 2.5, and 6 meters.
 # It will find mean biomasses and standard deviations of biomasses for each ring.
 
-# read the csv
+# USER: write your input csv location here
 input_data <- read.csv('C:/Users/js81535/Desktop/lidar_scan_calibration/HEF Biomass 2024.csv') 
+# USER: write you output location here
+output_location <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/mean_and_std_of_rings.csv'
 
 # add a column with the distance from the origin
 distances_list <- c()
@@ -31,7 +33,7 @@ for (i in 1:66) {
 }
 
 # build data frame with one row for each unique combination of stratum, biomass, plot, and distance
-output <- data.frame(stratum_col, biomass_type_col, plt_col, distance_col)
+output <- data.frame(stratum = stratum_col, biomass_type = biomass_type_col, macroplot = plt_col, distance_from_origin = distance_col)
 
 means <- c()
 stds <- c()
@@ -48,8 +50,15 @@ for (i in 1:198) {
   stds <- c(stds, std_of_biomass)
 }
 
-#print(means)
-print(stds)
+output$mean_biomass <- means
+output$std_dev_of_biomass <- stds
+print(output)
+
+write.csv(output, output_location, row.names = FALSE)
+
+
+
+
 
 
 
