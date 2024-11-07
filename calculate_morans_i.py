@@ -17,7 +17,7 @@ biomass_type = "PN"
 # USER: Type in the location of your input csv file.
 input_file = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024 multiplot.csv'
 # USER: Type in the range that you want to filter by (as a float or int), or enter None to use pure distances
-autocorrelation_range = 10
+autocorrelation_range = 20
 
 df = pd.read_csv(input_file)
 
@@ -69,6 +69,8 @@ for key, value in neighbors.items():
                 distance_weights.append(0)
 
     weights[key] = distance_weights
+
+print(weights)
 
 values = df.loc[df["Stratum"] == "0-30", biomass_type]
 
