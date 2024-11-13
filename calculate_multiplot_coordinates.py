@@ -36,7 +36,7 @@ df.loc[df["Macroplot"] == 2, 'multiplot_y'] += macroplot2_y_offset
 
 print(df)
 
-# plt.scatter(input_df["multiplot_x"], input_df["multiplot_y"])
-# plt.show()
+plt.scatter(df["multiplot_x"], df["multiplot_y"])
+plt.show()
 
-df.to_csv(output_file, index=False)
+# df.to_csv(output_file, index=False)
