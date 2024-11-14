@@ -48,3 +48,5 @@ output <- data.frame(macroplot, biomass_type, mean_biomass, standard_deviation)
 
 print(output)
 
+write.csv(output, output_location)
+
