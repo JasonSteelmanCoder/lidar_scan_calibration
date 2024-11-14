@@ -33,14 +33,18 @@ by_clip_plot_df <- by_clip_plot_df[, c("Macroplot", "Clip.Plot", "X1000hr", "X10
 macroplot <- c(rep(1, 11), rep(2, 11), rep(3, 11))
 biomass_type <- c(rep(c("X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL"), 3))
 mean_biomass <- c()
-for (i in 1:33) {
-  selected_biomasses <- subset(by_clip_plot_df, Macroplot == macroplot[[i]], select = biomass_type[[i]])
-  this_mean <- sum(selected_biomasses) / 24
+standard_deviation <- c()
+for (i in 1:33) {              # there are 33 unique combinations of macroplot and biomass type
+  biomass_values <- subset(by_clip_plot_df, Macroplot == macroplot[[i]], select = biomass_type[[i]])
+  this_mean <- sum(biomass_values) / 24         # there are 24 values per plot for each biomass type
   mean_biomass <- c(mean_biomass, this_mean)
+  squared_differences_from_mean <- (biomass_values - this_mean)^2
+  variance <- (sum(squared_differences_from_mean)) / 23    # 23 is N - 1
+  standard_dev <- sqrt(variance)
+  standard_deviation <- c(standard_deviation, standard_dev)
 }
 
-
-output <- data.frame(macroplot, biomass_type, mean_biomass)
+output <- data.frame(macroplot, biomass_type, mean_biomass, standard_deviation)
 
 print(output)
 
