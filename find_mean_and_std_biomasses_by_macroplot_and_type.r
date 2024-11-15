@@ -34,6 +34,7 @@ macroplot <- c(rep(1, 11), rep(2, 11), rep(3, 11))
 biomass_type <- c(rep(c("X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL"), 3))
 mean_biomass <- c()
 standard_deviation <- c()
+autocorrelation_range <- c(rep(c(100, 2.1, 2.8, 5.1, 0.92, 3.2, 2.2, 7.1, 4.8, 0.64, 68), 3))
 for (i in 1:33) {              # there are 33 unique combinations of macroplot and biomass type
   biomass_values <- subset(by_clip_plot_df, Macroplot == macroplot[[i]], select = biomass_type[[i]])
   this_mean <- sum(biomass_values) / 24         # there are 24 values per plot for each biomass type
@@ -44,9 +45,9 @@ for (i in 1:33) {              # there are 33 unique combinations of macroplot a
   standard_deviation <- c(standard_deviation, standard_dev)
 }
 
-output <- data.frame(macroplot, biomass_type, mean_biomass, standard_deviation)
+output <- data.frame(macroplot, biomass_type, mean_biomass, standard_deviation, autocorrelation_range)
 
 print(output)
 
-write.csv(output, output_location)
+#write.csv(output, output_location)
 
