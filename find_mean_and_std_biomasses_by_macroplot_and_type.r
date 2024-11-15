@@ -7,7 +7,7 @@ library(dplyr)
 # USER: write your input csv location here
 input_data <- read.csv('C:/Users/js81535/Desktop/lidar_scan_calibration/HEF Biomass 2024.csv') 
 # USER: write you output location here
-output_location <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/mean_and_std_biomasses_by_marcoplot_and_type.csv'
+output_location <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/mean_and_std_biomasses_by_macroplot_and_type.csv'
 
 low_df <- subset(input_data, Stratum == '0-30', select = c("Macroplot", "Clip.Plot", "X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL"))
 high_df <- subset(input_data, Stratum == '30-100', select = c("Macroplot", "Clip.Plot", "X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL"))
@@ -49,5 +49,5 @@ output <- data.frame(macroplot, biomass_type, mean_biomass, standard_deviation, 
 
 print(output)
 
-#write.csv(output, output_location)
+write.csv(output, output_location, row.names = FALSE)
 
