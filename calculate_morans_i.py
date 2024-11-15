@@ -17,7 +17,7 @@ biomass_type = "ETE"
 # USER: Type in the location of your input csv file.
 input_file = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024 multiplot.csv'
 # USER: Type in the range that you want to filter by (as a float or int), or enter None to use pure distances
-autocorrelation_range = None
+autocorrelation_range = 10
 
 df = pd.read_csv(input_file)
 
