@@ -1,6 +1,7 @@
 # This program will look at each biomass type in 3 macroplots.
 # It will find mean biomasses and standard deviations of biomasses for each combination of macroplot and type.
 # strata that come from the same clip plot will be summed to find total biomass represented by each clip plot
+# NOTE: this script drops clip plots that are 2.5m from the center, since they are spatially autocorrelated with the 2m clip plots
 
 library(dplyr)
 
@@ -26,9 +27,16 @@ by_clip_plot_df$PN <- by_clip_plot_df$PN.x + by_clip_plot_df$PN.y
 by_clip_plot_df$Wlit.BL <- by_clip_plot_df$Wlit.BL.x + by_clip_plot_df$Wlit.BL.y
 by_clip_plot_df$Wlive.BL <- by_clip_plot_df$Wlive.BL.x + by_clip_plot_df$Wlive.BL.y
 
+
 # purge redundant columns
 by_clip_plot_df <- by_clip_plot_df[, c("Macroplot", "Clip.Plot", "X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL")]
+
+
+# drop 2.5m clip plots (they are spatially autocorrelated for all biomass types)
+by_clip_plot_df <- by_clip_plot_df %>%
+  filter(grepl("\\.", Clip.Plot) == FALSE)
 #print(by_clip_plot_df)
+
 
 # initialize output columns
 macroplot <- c(rep(1, 11), rep(2, 11), rep(3, 11))
