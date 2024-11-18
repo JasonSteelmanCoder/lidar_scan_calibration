@@ -35,10 +35,10 @@ for i in range(3):
     plt.suptitle("CI Width For The Est'd Mean Biomass Per 1/4 m^2")
     plt.title(f"Macroplot {input_data.iloc[j + i * types_per_plot, 0]}")
     plt.legend()
-    plt.ylim(bottom=0)
+    plt.ylim([0, 130])
     plt.ylabel("Width of Confidence Interval")
     plt.xlabel("Number of Clip Plots")
-    plt.xticks(range(1, 26))
+    plt.xticks(range(1, 24, 2))
 
-plt.tight_layout()
+plt.tight_layout(w_pad=-2)
 plt.show()
