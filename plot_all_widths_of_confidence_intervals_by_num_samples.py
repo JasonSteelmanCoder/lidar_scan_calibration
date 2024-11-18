@@ -27,10 +27,8 @@ for i in range(3):
         W = np.sqrt((4 * (Z**2) * (sigma**2)) / (n))
         # print(W)
 
-        print(j)
         plt.plot(n, W, label = input_data.iloc[j + i * types_per_plot, 1], color=colors[j])
 
-    # print()
     plt.suptitle("CI Width For The Est'd Mean Biomass Per 1/4 m^2")
     plt.title(f"Macroplot {input_data.iloc[j + i * types_per_plot, 0]}")
     plt.legend()
