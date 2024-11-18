@@ -17,6 +17,8 @@ input_data = pd.read_csv(input_data_path)
 input_data = input_data[input_data["biomass_type"] != "X1000hr"]
 print(input_data)
 types_per_plot = int(len(input_data) / 3)
+
+plt.figure()
 for i in range(3):
     for j in range(types_per_plot):
 
@@ -27,6 +29,7 @@ for i in range(3):
         W = np.sqrt((4 * (Z**2) * (sigma**2)) / (n))
         # print(W)
 
+        plt.subplot(1, 3, i + 1)
         plt.plot(n, W, label = input_data.iloc[j + i * types_per_plot, 1], color=colors[j])
 
     plt.suptitle("CI Width For The Est'd Mean Biomass Per 1/4 m^2")
@@ -36,5 +39,6 @@ for i in range(3):
     plt.ylabel("Width of Confidence Interval")
     plt.xlabel("Number of Clip Plots")
     plt.xticks(range(1, 26))
-    plt.show()
 
+plt.tight_layout()
+plt.show()
