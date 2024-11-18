@@ -36,8 +36,3 @@ for i in range(3):
     plt.xticks(range(1, 26))
     plt.show()
 
-        # plt.clf()
-        # distr = np.random.normal(61, 3.5, 5000)
-        # plt.hist(distr, bins=100)
-        # plt.xlim(left=0)
-        # plt.show()
