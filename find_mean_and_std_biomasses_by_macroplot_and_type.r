@@ -26,15 +26,19 @@ by_clip_plot_df$PN <- by_clip_plot_df$PN.x + by_clip_plot_df$PN.y
 by_clip_plot_df$Wlit.BL <- by_clip_plot_df$Wlit.BL.x + by_clip_plot_df$Wlit.BL.y
 by_clip_plot_df$Wlive.BL <- by_clip_plot_df$Wlive.BL.x + by_clip_plot_df$Wlive.BL.y
 
-
+# purge redundant columns
 by_clip_plot_df <- by_clip_plot_df[, c("Macroplot", "Clip.Plot", "X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL")]
 #print(by_clip_plot_df)
 
+# initialize output columns
 macroplot <- c(rep(1, 11), rep(2, 11), rep(3, 11))
 biomass_type <- c(rep(c("X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL"), 3))
 mean_biomass <- c()
 standard_deviation <- c()
+# autocorrelation ranges are hard coded.
 autocorrelation_range <- c(rep(c(100, 2.1, 2.8, 5.1, 0.92, 3.2, 2.2, 7.1, 4.8, 0.64, 68), 3))
+
+# populate output columns
 for (i in 1:33) {              # there are 33 unique combinations of macroplot and biomass type
   biomass_values <- subset(by_clip_plot_df, Macroplot == macroplot[[i]], select = biomass_type[[i]])
   this_mean <- sum(biomass_values) / 24         # there are 24 values per plot for each biomass type
@@ -45,9 +49,11 @@ for (i in 1:33) {              # there are 33 unique combinations of macroplot a
   standard_deviation <- c(standard_deviation, standard_dev)
 }
 
+# build output data frame
 output <- data.frame(macroplot, biomass_type, mean_biomass, standard_deviation, autocorrelation_range)
 
 print(output)
 
+# save the output to csv
 write.csv(output, output_location, row.names = FALSE)
 
