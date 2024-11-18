@@ -9,9 +9,9 @@ input_data <- read.csv('C:/Users/js81535/Desktop/lidar_scan_calibration/HEF Biom
 # USER: write you output location here
 output_location <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/mean_and_std_biomasses_by_macroplot_and_type.csv'
 
+# combine the strata into one biomass per unique combination of clip plot and biomass type
 low_df <- subset(input_data, Stratum == '0-30', select = c("Macroplot", "Clip.Plot", "X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL"))
 high_df <- subset(input_data, Stratum == '30-100', select = c("Macroplot", "Clip.Plot", "X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL"))
-
 by_clip_plot_df <- inner_join(low_df, high_df, by = c("Macroplot", "Clip.Plot"))
 
 by_clip_plot_df$X1000hr <- by_clip_plot_df$X1000hr.x + by_clip_plot_df$X1000hr.y
