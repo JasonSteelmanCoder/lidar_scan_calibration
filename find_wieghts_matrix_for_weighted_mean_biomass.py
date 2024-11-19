@@ -13,6 +13,8 @@ load_dotenv()
 
 # USER: type the autocorrelation range of the biomass type here
 autocorrelation_range = 2.8
+# USER: put the strength of the weighting here
+weighting_strength = 0.5
 # USER: input the path to your data here
 input_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024.csv"
 
@@ -49,7 +51,7 @@ for i in range(24):
 
     inverse_distances[clip_plot] = sorted(this_inverse_distances, reverse=True)        
     inverse_distance_sums[clip_plot] = sum(this_inverse_distances)
-    weights[clip_plot] = 1 / sum(this_inverse_distances)**0.5               # change this exponent to adjust the strength of the weights
+    weights[clip_plot] = 1 / sum(this_inverse_distances)**weighting_strength               # change this exponent to adjust the strength of the weights
 
 # print(inverse_distances)
 
