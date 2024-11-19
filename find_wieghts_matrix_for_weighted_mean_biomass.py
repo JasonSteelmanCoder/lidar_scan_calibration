@@ -49,7 +49,7 @@ for i in range(24):
 
     inverse_distances[clip_plot] = sorted(this_inverse_distances, reverse=True)        
     inverse_distance_sums[clip_plot] = sum(this_inverse_distances)
-    weights[clip_plot] = 1 / sum(this_inverse_distances)
+    weights[clip_plot] = 1 / sum(this_inverse_distances)**0.5               # change this exponent to adjust the strength of the weights
 
 # print(inverse_distances)
 
