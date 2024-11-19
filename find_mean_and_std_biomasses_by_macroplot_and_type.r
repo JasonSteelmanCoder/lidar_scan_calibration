@@ -31,7 +31,6 @@ by_clip_plot_df$Wlive.BL <- by_clip_plot_df$Wlive.BL.x + by_clip_plot_df$Wlive.B
 # purge redundant columns
 by_clip_plot_df <- by_clip_plot_df[, c("Macroplot", "Clip.Plot", "X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL")]
 
-
 # drop 2.5m clip plots (they are spatially autocorrelated for all biomass types)
 by_clip_plot_df <- by_clip_plot_df %>%
   filter(grepl("\\.", Clip.Plot) == FALSE)
