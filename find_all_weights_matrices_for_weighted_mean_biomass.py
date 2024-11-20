@@ -47,14 +47,28 @@ distances_by_clip_plot = {}
 curved_distances_by_clip_plot = {}
 weights = {}
 
+initial_data = {
+    "Macroplot": [1] * 24 + [2] * 24 + [3] * 24,
+    "Clip.Plot": ['E2', 'E2.5', 'E5', 'N2', 'N2.5', 'N5', 'NE3', 'NE4', 'NE6', 'NW3', 'NW4', 'NW6', 'S2', 'S2.5', 'S5', 'SE3', 'SE4', 'SE6', 'SW3', 'SW4', 'SW6', 'W2', 'W2.5', 'W5'] * 3,
+    "X1000hr": [None] * 72,
+    "X100hr": [None] * 72,
+    "X10hr": [None] * 72,
+    "X1hr": [None] * 72,
+    "CL": [None] * 72,
+    "ETE": [None] * 72,
+    "FL": [None] * 72,
+    "PC": [None] * 72,
+    "PN": [None] * 72,
+    "Wlit.BL": [None] * 72,
+    "Wlive.BL": [None] * 72
+}
+output = pd.DataFrame(initial_data)
+
 for i in range(3):
     plot = plots[i]
     for item in autocorrelation_ranges.items():
         biomass_type = item[0]
         autocorrelation_range = item[1]
-        print(f"macroplot: {i + 1}")
-        print(biomass_type)
-        print(autocorrelation_range)
 
         for k in range(24):
             clip_plot = plot["Clip Plot"][k]
@@ -81,4 +95,13 @@ for i in range(3):
 
         # print(distances_by_clip_plot)
         # print(curved_distances_by_clip_plot)
-        print(weights)
+        
+        # print(f"macroplot: {i + 1}")
+        # print(biomass_type)
+        # print(autocorrelation_range)
+        # print(weights)
+
+        for item in weights.items():
+            output.loc[(output["Macroplot"] == i + 1) & (output["Clip.Plot"] == item[0]), biomass_type] = item[1]
+
+print(output)
