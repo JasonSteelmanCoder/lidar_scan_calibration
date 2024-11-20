@@ -14,7 +14,7 @@ load_dotenv()
 # USER: input the path to your data here
 input_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024.csv"
 # USER: input your output location here
-output_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/clip_plot_weights_for_10h.csv"
+output_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/clip_plot_weights.csv"
 
 # these autocorreletion ranges are based on the variogram models
 autocorrelation_ranges = {
@@ -105,3 +105,5 @@ for i in range(3):
             output.loc[(output["Macroplot"] == i + 1) & (output["Clip.Plot"] == item[0]), biomass_type] = item[1]
 
 print(output)
+
+output.to_csv(output_data_path, index=False)
