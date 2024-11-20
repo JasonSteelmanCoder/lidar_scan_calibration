@@ -96,10 +96,10 @@ for i in range(3):
         # print(distances_by_clip_plot)
         # print(curved_distances_by_clip_plot)
         
-        # print(f"macroplot: {i + 1}")
-        # print(biomass_type)
-        # print(autocorrelation_range)
-        # print(weights)
+        print(f"macroplot: {i + 1}")
+        print(biomass_type)
+        print(autocorrelation_range)
+        print(weights)
 
         for item in weights.items():
             output.loc[(output["Macroplot"] == i + 1) & (output["Clip.Plot"] == item[0]), biomass_type] = item[1]

@@ -11,7 +11,7 @@ input_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_cali
 # USER: enter the location of the input folder here
 output_folder = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/estimations_by_biomass_type"
 # USER: put the number of samples you want to simulate here
-samples_simulated = 5 
+samples_simulated = 3 
 
 input_data = pd.read_csv(input_data_path)
 # print(input_data)
@@ -60,4 +60,4 @@ for i in range(33):
     file_name = f"confidence_interval_macroplot{input_data.iloc[i, 0]}_{input_data.iloc[i, 1].replace(".", "")}"
     plt.savefig(os.path.join(output_folder, file_name))
     plt.close()
-    
+
