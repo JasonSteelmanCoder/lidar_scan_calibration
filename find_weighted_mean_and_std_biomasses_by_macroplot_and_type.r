@@ -85,5 +85,5 @@ output <- data.frame(macroplot, biomass_type, weighted_mean_biomass, weighted_st
 print(output)
 
 # save the output to csv
-#write.csv(output, output_location, row.names = FALSE)
+write.csv(output, output_location, row.names = FALSE)
 
