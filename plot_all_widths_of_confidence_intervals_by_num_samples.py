@@ -7,7 +7,7 @@ import pandas as pd
 load_dotenv()
 
 # USER: enter the location of the input data here
-input_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/mean_and_std_biomasses_by_macroplot_and_type.csv"
+input_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/weighted_mean_and_std_biomasses_by_macroplot_and_type.csv"
 
 colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
           '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', '#ff1493']
