@@ -1,3 +1,6 @@
+# for each unique combination of macroplot and biomass type, this script saves an elbow plot showing the width of the confidence interval for different numbers
+# of clip plots, along with a histogram showing the sample mean and the distribution of probable actual population means. The purpose of the figures is to give 
+# an intuitive sense of how precise (or inprecise) our estimations of biomass are.
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -25,7 +28,7 @@ for i in range(33):
     n = np.linspace(1, 24, 24)
     W = np.sqrt((4 * (Z**2) * (sigma**2)) / (n))
 
-    plt.subplot(1, 2, 1)
+    plt.subplot(1, 2, 1)            # put two plots in one panel
     plt.suptitle(f"{input_data.iloc[i, 1]} Macroplot {input_data.iloc[i, 0]}")
     plt.title(f"CI Width For Est'd Mean Biomass\nPer 1/4 m^2")  
 
@@ -42,7 +45,7 @@ for i in range(33):
         plt.xlabel("Number of Clip Plots")
         plt.xticks(range(1, 24, 2))
 
-    plt.subplot(1, 2, 2)
+    plt.subplot(1, 2, 2)            # the histogram goes in the second section of the panel
     plt.title(f"Distribution of Possible\nTrue Means With {samples_simulated} Clip Plots")
     if W[0] == 0:
         plt.text(0.5, 0.5, "No biomass found for this category", ha='center', va='center')
@@ -57,6 +60,7 @@ for i in range(33):
 
     plt.tight_layout()
 
+    # save each figure to its own png image file
     file_name = f"confidence_interval_macroplot{input_data.iloc[i, 0]}_{input_data.iloc[i, 1].replace(".", "")}"
     plt.savefig(os.path.join(output_folder, file_name))
     plt.close()

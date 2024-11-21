@@ -74,8 +74,10 @@ print(weights)
 
 values = df.loc[df["Stratum"] == "0-30", biomass_type]
 
+# don't transform the weights
 transformation = "O"
 
+# calculate moran's I
 weights_matrix = libpysal.weights.W(neighbors=neighbors, weights=weights, id_order=clip_plot_names)
 moran_obj = Moran(values, weights_matrix, transformation=transformation)
 

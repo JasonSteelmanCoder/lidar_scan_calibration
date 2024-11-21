@@ -1,3 +1,5 @@
+# CAUTION: this script only looks at one macroplot at a time. To go through all macroplots, use find_all_weights_matrices_for_weighted_mean_biomass.py
+
 # this script will find a weights matrix to compensate for spatial autocorrelation when calculating a weighted mean or weighted standard deviation
 # of clip plot biomass values
 # this will be done by macroplot, with high and low strata summed into one biomass value per clip plot

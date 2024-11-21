@@ -1,3 +1,5 @@
+# CAUTION: this script only calculates the curve for one macroplot and one biomass type at a time. 
+
 import matplotlib.pyplot as plt
 import numpy as np
 

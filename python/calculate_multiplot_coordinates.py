@@ -9,9 +9,11 @@ import matplotlib.pyplot as plt
 
 load_dotenv()
 
-input_file = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024.csv'
-output_file = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024 multiplot.csv'
+#USER: write the location of your input and output here
+input_file = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/csv_data/HEF Biomass 2024.csv'
+output_file = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/csv_data/HEF Biomass 2024 multiplot.csv'
 
+# set the offsets for plots that are away from the origin (the origin is the center of macroplot 3)
 macroplot1_x_offset = 28.9245
 macroplot1_y_offset = -7.2117
 macroplot2_x_offset = 27.7773
@@ -34,9 +36,10 @@ df.loc[df["Macroplot"] == 1, 'multiplot_y'] += macroplot1_y_offset
 df.loc[df["Macroplot"] == 2, 'multiplot_x'] += macroplot2_x_offset
 df.loc[df["Macroplot"] == 2, 'multiplot_y'] += macroplot2_y_offset
 
+# see the coordinates
 print(df)
-
 plt.scatter(df["multiplot_x"], df["multiplot_y"])
 plt.show()
 
+# uncomment to save to csv
 # df.to_csv(output_file, index=False)

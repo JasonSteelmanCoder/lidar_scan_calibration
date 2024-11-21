@@ -1,3 +1,5 @@
+# This script makes three plots, each one representing a macroplot. On each plot there are several curves. Each curve represents the width of the confidence
+# interval for one type of biomass on that macroplot for each number of clip plots from 1 to 24. 
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -7,7 +9,7 @@ import pandas as pd
 load_dotenv()
 
 # USER: enter the location of the input data here
-input_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/weighted_mean_and_std_biomasses_by_macroplot_and_type.csv"
+input_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/csv_data/weighted_mean_and_std_biomasses_by_macroplot_and_type.csv"
 
 colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', 
           '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', '#ff1493']
@@ -26,10 +28,10 @@ for i in range(3):
         sigma = input_data.iloc[j + i * types_per_plot, 3]          # the standard deviation of the biomass on observed clip plots
 
         n = np.linspace(1, 24, 24)
-        W = np.sqrt((4 * (Z**2) * (sigma**2)) / (n))
+        W = np.sqrt((4 * (Z**2) * (sigma**2)) / (n))            # calculate the width of a 95% confidence interval (note that half of that CI will be on each side of the estimated mean)
         # print(W)
 
-        plt.subplot(1, 3, i + 1)
+        plt.subplot(1, 3, i + 1)                 # make three plots on one panel
         plt.plot(n, W, label = input_data.iloc[j + i * types_per_plot, 1], color=colors[j])
 
     plt.suptitle("CI Width For The Est'd Mean Biomass Per 1/4 m^2")

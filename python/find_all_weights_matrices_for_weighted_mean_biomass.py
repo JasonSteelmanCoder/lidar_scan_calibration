@@ -12,9 +12,9 @@ import matplotlib.pyplot as plt
 load_dotenv()
 
 # USER: input the path to your data here
-input_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/HEF Biomass 2024.csv"
+input_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/csv_data/HEF Biomass 2024.csv"
 # USER: input your output location here
-output_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/clip_plot_weights.csv"
+output_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/csv_data/clip_plot_weights.csv"
 
 # these autocorreletion ranges are based on the variogram models
 autocorrelation_ranges = {
@@ -41,6 +41,7 @@ macroplot3 = grouped_data[grouped_data["Macroplot"] == 3]
 macroplot2.reset_index(inplace=True)
 macroplot3.reset_index(inplace=True)
 
+# initialize data structures
 plots = [macroplot1, macroplot2, macroplot3]
 
 distances_by_clip_plot = {}
@@ -64,12 +65,14 @@ initial_data = {
 }
 output = pd.DataFrame(initial_data)
 
+# populate the output. The outer loop cycles through the three macroplots. The inner loop goes through the 11 biomass types and their autocorrelation ranges
 for i in range(3):
     plot = plots[i]
     for item in autocorrelation_ranges.items():
         biomass_type = item[0]
         autocorrelation_range = item[1]
 
+        # go through all 24 clip plots with the given macroplot and range
         for k in range(24):
             clip_plot = plot["Clip Plot"][k]
             list_coords = ast.literal_eval(plot["Coordinates"][k])
@@ -101,9 +104,11 @@ for i in range(3):
         print(autocorrelation_range)
         print(weights)
 
+        # add the calculated weights to the output data frame
         for item in weights.items():
             output.loc[(output["Macroplot"] == i + 1) & (output["Clip.Plot"] == item[0]), biomass_type] = item[1]
 
 print(output)
 
+# uncomment to save to csv
 # output.to_csv(output_data_path, index=False)

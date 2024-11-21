@@ -11,12 +11,14 @@ weighted_input = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calib
 # USER: enter your output location here.
 output_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/macroplot_biomass_estimations.csv"
 
+# make data frames and add columns with estimations
 unweighted_df = pd.read_csv(unweighted_input)
 weighted_df = pd.read_csv(weighted_input)
 
 unweighted_df["total_biomass"] = unweighted_df["mean_biomass"] * 1256
 weighted_df["weighted_total_biomass"] = weighted_df["weighted_mean_biomass"] * 1256
 
+# make an output data frame to store the estimated biomasses
 estimated_total_biomasses = pd.DataFrame(data={
     "macroplot": unweighted_df["macroplot"],
     "biomass_type": unweighted_df["biomass_type"],
@@ -26,4 +28,5 @@ estimated_total_biomasses = pd.DataFrame(data={
 
 print(estimated_total_biomasses)
 
+# save to csv
 estimated_total_biomasses.to_csv(output_path, index=False)
