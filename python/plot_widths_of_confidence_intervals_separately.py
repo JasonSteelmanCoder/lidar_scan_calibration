@@ -10,11 +10,11 @@ import pandas as pd
 load_dotenv()
 
 # USER: enter the location of the input data here
-input_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/mean_and_std_biomasses_by_macroplot_and_type.csv"
+input_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/csv_data/weighted_mean_and_std_biomasses_by_macroplot_and_type.csv"
 # USER: enter the location of the input folder here
 output_folder = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/estimations_by_biomass_type"
 # USER: put the number of samples you want to simulate here
-samples_simulated = 3 
+samples_simulated = 5 
 
 input_data = pd.read_csv(input_data_path)
 # print(input_data)
