@@ -6,7 +6,7 @@ library(png)
 library(magick)
 library(glue)
 
-input.csv <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/HEF Biomass 2024 multiplot.csv'
+input.csv <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/HEF Biomass 2024 multiplot.csv'
 file_data <- read.csv(input.csv)
 
 all_strata_data <- file_data %>% 
