@@ -19,7 +19,7 @@ samples_simulated = 5
 input_data = pd.read_csv(input_data_path)
 # print(input_data)
 
-for i in range(33):
+for i in range(36):
     plt.figure()
 
     Z = 1.96            # 95% confidence interval
@@ -38,7 +38,7 @@ for i in range(33):
         plt.plot(n, W, label = f"Macroplot {input_data.iloc[i, 0]}: {input_data.iloc[i, 1]}")
         plt.legend()
         if W[0] > 200:
-            plt.annotate("Note the high\nscale of uncertainty", (10, 800))
+            plt.annotate("Note the high\nscale of uncertainty", (10, 1400))
         else:
             plt.ylim([0, 130])
         plt.ylabel("Width of Confidence Interval")
