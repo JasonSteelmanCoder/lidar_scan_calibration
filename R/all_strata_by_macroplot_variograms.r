@@ -36,8 +36,6 @@ macroplot3_df <- subset(all_strata_data, Macroplot == 3)
 
 biomass_types <- names(all_strata_data)[6:16]
 
-k <- 1
-
 for (type in biomass_types) {
   
   biomass_type = type
