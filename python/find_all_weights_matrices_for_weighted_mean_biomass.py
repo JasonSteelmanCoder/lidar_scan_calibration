@@ -109,7 +109,7 @@ for i in range(3):
         for k in range(24):
             clip_plot = plot["Clip Plot"][k]
             if autocorrelation_range is None:
-                weights[clip_plot] = None
+                weights[clip_plot] = 0       # if there is no data for a biomass type, give it a weight of 0
                 continue
             else:
                 list_coords = ast.literal_eval(plot["Coordinates"][k])
