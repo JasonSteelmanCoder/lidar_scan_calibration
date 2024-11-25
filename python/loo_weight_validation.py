@@ -47,11 +47,11 @@ for i in range(3):
         
         unweighted_estimated_mean_biomass_per_clip_plot = np.mean(unweighted_ingroup)
         weighted_estimated_mean_biomass_per_clip_plot = weighted_ingroup.sum() / weights_ingroup.sum()
-        unweighted_losses.append(unweighted_estimated_mean_biomass_per_clip_plot - test_value)
-        weighted_losses.append(weighted_estimated_mean_biomass_per_clip_plot - test_value)
+        unweighted_losses.append((unweighted_estimated_mean_biomass_per_clip_plot - test_value)**2)
+        weighted_losses.append((weighted_estimated_mean_biomass_per_clip_plot - test_value)**2)
 
-    print(np.mean(unweighted_losses))
-    print(np.mean(weighted_losses))
+    print(np.sqrt(np.mean(unweighted_losses)))
+    print(np.sqrt(np.mean(weighted_losses)))
     print()
 
 
