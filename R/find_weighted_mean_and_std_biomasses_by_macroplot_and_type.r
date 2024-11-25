@@ -95,3 +95,12 @@ print(output)
 # save the output to csv
 #write.csv(output, output_location, row.names = FALSE)
 
+
+# uncomment to make csvs of combined masses and weighted masses.
+# CAUTION: the weighted masses don't represent the actual mass of the clip plot, but how it is integrated into the weighted model of the macroplot.
+#write.csv(by_clip_plot_df, 'C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/biomasses_with_strata_combined.csv', row.names = FALSE)
+#write.csv(weighted_masses_df, 'C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/weighted_masses.csv', row.names = FALSE)
+
+
+
+
