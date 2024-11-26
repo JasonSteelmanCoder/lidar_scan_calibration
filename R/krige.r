@@ -39,6 +39,8 @@ macroplot3 <- subset(file_data, Macroplot == 3)
 biomass_types <- names(file_data)[6:17]
 print(biomass_types)
 
+biomass_estimates <- data.frame(row.names = c("macroplot", "biomass_type", "kriged_biomass_estimate"))
+
 for (type in biomass_types) {
   
   biomass_type = type
@@ -64,8 +66,8 @@ for (type in biomass_types) {
   origin <- c(x0 = 0, y0 = 0)
   radius <- 10
   grid_points <- expand.grid(
-    x = seq(-radius, radius, by = 0.1),
-    y = seq(-radius, radius, by = 0.1)
+    x = seq(-radius, radius, by = 0.5),
+    y = seq(-radius, radius, by = 0.5)
   )
   grid_points <- grid_points[
     (grid_points$x - origin[["x0"]])^2 + (grid_points$y - origin[["y0"]])^2 <= radius^2,
@@ -86,5 +88,12 @@ for (type in biomass_types) {
       scale_fill_viridis_c() +
       labs(title = paste("Macroplot", i, '\n', data_name, sep = ' '), fill = "Prediction")
     )
+    print(c(paste("Macroplot", i, data_name, sep = ' '), sum(kriged$var1.pred)))
+    new_row <- data.frame(macroplot = i, biomass_type = data_name, kriged_biomass_estimate = sum(kriged$var1.pred))
+    biomass_estimates <- rbind(biomass_estimates, new_row)
   }
 }
+
+print(biomass_estimates)
+
+
