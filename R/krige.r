@@ -14,54 +14,52 @@ file_data <- read.csv(input.csv)
 file_data$X <- as.numeric(str_extract(file_data$Coordinates, "(-)?\\d+(\\.\\d+)?"))
 file_data$Y <- as.numeric(str_extract(file_data$Coordinates, "((-)?\\d+(\\.\\d+)?)\\]", group=1))
 
-macroplot1_low <- subset(file_data, Macroplot == 1 & Stratum == '0-30')
-macroplot2_low <- subset(file_data, Macroplot == 2 & Stratum == '0-30')
-macroplot3_low <- subset(file_data, Macroplot == 3 & Stratum == '0-30')
-macroplot1_high <- subset(file_data, Macroplot == 1 & Stratum == '30-100')
-macroplot2_high <- subset(file_data, Macroplot == 2 & Stratum == '30-100')
-macroplot3_high <- subset(file_data, Macroplot == 3 & Stratum == '30-100')
+file_data <- file_data %>%
+  group_by(Macroplot, Clip.Plot, Coordinates, X, Y) %>%
+  summarize(
+    'X1000hr' = sum(X1000hr),
+    'X100hr' = sum(X100hr),
+    'X10hr' = sum(X10hr),
+    'X1hr' = sum(X1hr),
+    'CL' = sum(CL),
+    'ETE' = sum(ETE),
+    'FL' = sum(FL),
+    'PC' = sum(PC),
+    'PN' = sum(PN),
+    'Wlit.BL' = sum(Wlit.BL),
+    'Wlive.BL' = sum(Wlive.BL),
+    'total_biomass' = sum(X1000hr) + sum(X100hr) + sum(X10hr) + sum(X1hr) + sum(CL) + sum(ETE) + sum(FL) + sum(PC) + sum(PN) + sum(Wlit.BL) + sum(Wlive.BL),
+    .groups = 'keep'
+  )
 
-biomass_types <- names(file_data)[5:15]
+macroplot1 <- subset(file_data, Macroplot == 1)
+macroplot2 <- subset(file_data, Macroplot == 2)
+macroplot3 <- subset(file_data, Macroplot == 3)
+
+biomass_types <- names(file_data)[6:17]
 print(biomass_types)
 
 for (type in biomass_types) {
   
   biomass_type = type
   
-  spatial_df1_low <- SpatialPointsDataFrame(
-    coords = macroplot1_low[, c("X", "Y")],
-    data = subset(macroplot1_low, select = biomass_type)
+  spatial_df1 <- SpatialPointsDataFrame(
+    coords = macroplot1[, c("X", "Y")],
+    data = subset(macroplot1, select = biomass_type)
   )
   
-  spatial_df2_low <- SpatialPointsDataFrame(
-    coords = macroplot2_low[, c("X", "Y")],
-    data = subset(macroplot2_low, select = biomass_type)
+  spatial_df2 <- SpatialPointsDataFrame(
+    coords = macroplot2[, c("X", "Y")],
+    data = subset(macroplot2, select = biomass_type)
   )
   
-  spatial_df3_low <- SpatialPointsDataFrame(
-    coords = macroplot3_low[, c("X", "Y")],
-    data = subset(macroplot3_low, select = biomass_type)
+  spatial_df3 <- SpatialPointsDataFrame(
+    coords = macroplot3[, c("X", "Y")],
+    data = subset(macroplot3, select = biomass_type)
   )
   
-  spatial_df1_high <- SpatialPointsDataFrame(
-    coords = macroplot1_high[, c("X", "Y")],
-    data = subset(macroplot1_high, select = biomass_type)
-  )
-  
-  spatial_df2_high <- SpatialPointsDataFrame(
-    coords = macroplot2_high[, c("X", "Y")],
-    data = subset(macroplot2_high, select = biomass_type)
-  )
-  
-  spatial_df3_high <- SpatialPointsDataFrame(
-    coords = macroplot3_high[, c("X", "Y")],
-    data = subset(macroplot3_high, select = biomass_type)
-  )
-  
-  low_plot_layers = c(spatial_df1_low, spatial_df2_low, spatial_df3_low)
-  high_plot_layers = c(spatial_df1_high, spatial_df2_high, spatial_df3_high)
-  low_plot_layer_names = c("macroplot1_low_", "macroplot2_low_", "macroplot3_low_")
-  high_plot_layer_names = c("macroplot1_high_", "macroplot2_high_", "macroplot3_high_")
+  plot_layers = c(spatial_df1, spatial_df2, spatial_df3)
+  plot_layer_names = c("macroplot1_", "macroplot2_", "macroplot3_")
   
   origin <- c(x0 = 0, y0 = 0)
   radius <- 10
@@ -75,12 +73,12 @@ for (type in biomass_types) {
   coordinates(grid_points) <- ~x + y
     
   for (i in 1:3) {
-    data_name <- names(low_plot_layers[[i]])[1]
+    data_name <- names(plot_layers[[i]])[1]
     formula <- as.formula(paste(data_name, '~ 1'))
     
-    clean_data_name <- glue(low_plot_layer_names[[i]], gsub("\\.", "", data_name))
-    variogram = autofitVariogram(formula = formula, input_data = low_plot_layers[[i]], verbose = FALSE, miscFitOptions = list(merge.small.bins = TRUE))
-    kriged <- krige(formula, low_plot_layers[[i]], newdata=grid_points, model = variogram$var_model)
+    clean_data_name <- glue(plot_layer_names[[i]], gsub("\\.", "", data_name))
+    variogram = autofitVariogram(formula = formula, input_data = plot_layers[[i]], verbose = FALSE, miscFitOptions = list(merge.small.bins = TRUE))
+    kriged <- krige(formula, plot_layers[[i]], newdata=grid_points, model = variogram$var_model)
     kriging_df <- as.data.frame(kriged)
     print(ggplot(kriging_df, aes(x = x, y = y, fill = var1.pred)) + 
       geom_tile() + 
