@@ -9,6 +9,9 @@ library(glue)
 library(ggplot2)
 
 input.csv <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/HEF Biomass 2024.csv'
+previous.estimations.csv <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/macroplot_biomass_estimations.csv'
+output.csv <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/kriged_biomass_estimations.csv'
+image.output.folder <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/kriged_images/'
 file_data <- read.csv(input.csv)
 
 file_data$X <- as.numeric(str_extract(file_data$Coordinates, "(-)?\\d+(\\.\\d+)?"))
@@ -39,7 +42,8 @@ macroplot3 <- subset(file_data, Macroplot == 3)
 biomass_types <- names(file_data)[6:17]
 print(biomass_types)
 
-biomass_estimates <- data.frame(row.names = c("macroplot", "biomass_type", "kriged_biomass_estimate"))
+biomass_estimates <- read.csv(previous.estimations.csv)
+biomass_estimates["kriged_biomass"] <- NA
 
 for (type in biomass_types) {
   
@@ -82,18 +86,24 @@ for (type in biomass_types) {
     variogram = autofitVariogram(formula = formula, input_data = plot_layers[[i]], verbose = FALSE, miscFitOptions = list(merge.small.bins = TRUE))
     kriged <- krige(formula, plot_layers[[i]], newdata=grid_points, model = variogram$var_model)
     kriging_df <- as.data.frame(kriged)
-    print(ggplot(kriging_df, aes(x = x, y = y, fill = var1.pred)) + 
+    this_plot <- ggplot(kriging_df, aes(x = x, y = y, fill = var1.pred)) + 
       geom_tile() + 
       coord_fixed() + 
       scale_fill_viridis_c() +
       labs(title = paste("Macroplot", i, '\n', data_name, sep = ' '), fill = "Prediction")
-    )
-    print(c(paste("Macroplot", i, data_name, sep = ' '), sum(kriged$var1.pred)))
-    new_row <- data.frame(macroplot = i, biomass_type = data_name, kriged_biomass_estimate = sum(kriged$var1.pred))
-    biomass_estimates <- rbind(biomass_estimates, new_row)
+    #print(this_plot)
+    file_name <- paste(clean_data_name, '.png', sep = '')
+    ggsave(file.path(image.output.folder, file_name), this_plot)
+    #print(c(paste("Macroplot", i, data_name, sep = ' '), sum(kriged$var1.pred)))
+    total <- sum(kriged$var1.pred)
+    if (is.na(total)) {
+      total = 0  
+    } 
+    biomass_estimates$kriged_biomass[biomass_estimates$macroplot == i & biomass_estimates$biomass_type == data_name] = total
   }
 }
 
-print(biomass_estimates)
+#print(biomass_estimates)
+#write.csv(biomass_estimates, output.csv, row.names = FALSE)
 
 
