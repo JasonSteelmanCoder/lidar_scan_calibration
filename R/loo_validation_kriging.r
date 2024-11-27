@@ -67,6 +67,8 @@ round_to_half <- function(num) {
   return (round(num * 2, 0) / 2)
 }
 
+root_mean_sqared_errors <- c()
+
 # loop through macroplots
 for (i in 1:3) {
   if (i == 1) {
@@ -110,6 +112,7 @@ for (i in 1:3) {
     #print(c(paste("Macroplot", i, data_name, sep = ' '), sum(kriged$var1.pred)))
   
   }
-  print(sqrt(mean(losses)))
+  root_mean_sqared_errors <- c(root_mean_sqared_errors, sqrt(mean(losses)))
 }
 
+print(root_mean_sqared_errors)
