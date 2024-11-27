@@ -103,7 +103,9 @@ for (type in biomass_types) {
   }
 }
 
-#print(biomass_estimates)
+print(biomass_estimates)
 #write.csv(biomass_estimates, output.csv, row.names = FALSE)
+
+
 
 
