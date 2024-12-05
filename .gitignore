@@ -10,3 +10,5 @@ scratch.*
 settings.json
 *.ipynb_checkpoints
 */.ipynb_checkpoints
+*.bin
+
