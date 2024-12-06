@@ -13,4 +13,4 @@ settings.json
 *.bin
 *.las
 *.laz
-
+*.json
