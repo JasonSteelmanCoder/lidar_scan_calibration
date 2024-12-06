@@ -152,7 +152,8 @@ for i in range(24):
     left_wall_ys.append(left_wall_y)
 
 for value in new_macroplot.values():
-    print(value)
+    if value["name"] == 'e2.5':
+        print(value)
 
 plt.scatter(new_xs, new_ys)
 plt.scatter(inner_wall_xs, inner_wall_ys, color='orange', alpha=0.33)
@@ -160,4 +161,4 @@ plt.scatter(outer_wall_xs, outer_wall_ys, color='orange', alpha=0.33)
 plt.scatter(right_wall_xs, right_wall_ys, color='purple', alpha=0.33)
 plt.scatter(left_wall_xs, left_wall_ys, color='green', alpha=0.33)
 plt.axis('equal')
-plt.show()
+# plt.show()
