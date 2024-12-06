@@ -1,17 +1,10 @@
+import os
 import math
 import matplotlib.pyplot as plt
-import re
 import numpy as np
+import json
 
-degrees_rotation = 104.8
-rotation_angle = degrees_rotation * (math.pi / 180)      # in radians
-
-a = math.cos(rotation_angle)
-b = -1 * math.sin(rotation_angle)
-c = math.sin(rotation_angle)
-d = math.cos(rotation_angle)
-
-rotation_matrix = [a, b, c, d]
+output_location = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/coordinates.json'
 
 coordinate_pairs = [
 (2,0),
@@ -67,17 +60,48 @@ point_names = [
     "w5"
 ]
 
+degrees_rotation = 104.8
+rotation_angle = degrees_rotation * (math.pi / 180)      # in radians
+
+a = math.cos(rotation_angle)
+b = -1 * math.sin(rotation_angle)
+c = math.sin(rotation_angle)
+d = math.cos(rotation_angle)
+
+rotation_matrix = [a, b, c, d]
+
+outer_left_a = math.cos(45 * (math.pi / 180))
+outer_left_b = -1 * math.sin(45 * (math.pi / 180))
+outer_left_c = math.sin(45 * (math.pi / 180))
+outer_left_d = math.cos(45 * (math.pi / 180))
+
+inner_left_a = math.cos(135 * (math.pi / 180))
+inner_left_b = -1 * math.sin(135 * (math.pi / 180))
+inner_left_c = math.sin(135 * (math.pi / 180))
+inner_left_d = math.cos(135 * (math.pi / 180))
+
+inner_right_a = math.cos(225 * (math.pi / 180))
+inner_right_b = -1 * math.sin(225 * (math.pi / 180))
+inner_right_c = math.sin(225 * (math.pi / 180))
+inner_right_d = math.cos(225 * (math.pi / 180))
+
+outer_right_a = math.cos(315 * (math.pi / 180))
+outer_right_b = -1 * math.sin(315 * (math.pi / 180))
+outer_right_c = math.sin(315 * (math.pi / 180))
+outer_right_d = math.cos(315 * (math.pi / 180))
+
+
 new_macroplot = {}
 new_xs = []
 new_ys = []
-inner_wall_xs = []
-inner_wall_ys = []
-outer_wall_xs = []
-outer_wall_ys = []
-right_wall_xs = []
-right_wall_ys = []
-left_wall_xs = []
-left_wall_ys = []
+outer_left_xs = []
+outer_left_ys = []
+inner_left_xs = []
+inner_left_ys = []
+inner_right_xs = []
+inner_right_ys = []
+outer_right_xs = []
+outer_right_ys = []
 
 for i in range(24):
     point = coordinate_pairs[i]
@@ -85,80 +109,85 @@ for i in range(24):
     old_x = point[0]
     old_y = point[1]
 
-    # find locations of the clip plot's original walls
+    # find locations of the clip plot's original vertices
     distance_from_origin = np.sqrt(old_x**2 + old_y**2)
+
+    scaling_factor = np.sqrt(0.125) / distance_from_origin      # scales the vector to the length of a clip plot diagonal from center to corner 
+    old_tip_x = scaling_factor * old_x
+    old_tip_y = scaling_factor * old_y
     
-    inner_wall_distance = distance_from_origin - 0.25
-    inner_wall_scaling_factor = inner_wall_distance / distance_from_origin
-    old_inner_wall_x = old_x * inner_wall_scaling_factor
-    old_inner_wall_y = old_y * inner_wall_scaling_factor
+    # rotate vertices around the clip plot center (by rotating them about the origin, then translating them back by the vector)
+    old_outer_left_x = outer_left_a * old_tip_x + outer_left_b * old_tip_y
+    old_outer_left_y = outer_left_c * old_tip_x + outer_left_d * old_tip_y
+    old_outer_left_x = old_outer_left_x + old_x
+    old_outer_left_y = old_outer_left_y + old_y
 
-    outer_wall_distance = distance_from_origin + 0.25
-    outer_wall_scaling_factor = outer_wall_distance / distance_from_origin
-    old_outer_wall_x = old_x * outer_wall_scaling_factor
-    old_outer_wall_y = old_y * outer_wall_scaling_factor
+    old_inner_left_x = inner_left_a * old_tip_x + inner_left_b * old_tip_y
+    old_inner_left_y = inner_left_c * old_tip_x + inner_left_d * old_tip_y
+    old_inner_left_x = old_inner_left_x + old_x
+    old_inner_left_y = old_inner_left_y + old_y
 
-    quarter_unit_vector_x = (old_x / distance_from_origin) / 4
-    quarter_unit_vector_y = (old_y / distance_from_origin) / 4
+    old_inner_right_x = inner_right_a * old_tip_x + inner_right_b * old_tip_y
+    old_inner_right_y = inner_right_c * old_tip_x + inner_right_d * old_tip_y
+    old_inner_right_x = old_inner_right_x + old_x
+    old_inner_right_y = old_inner_right_y + old_y
 
-    old_right_wall_x = old_x + quarter_unit_vector_y
-    old_right_wall_y = old_y - quarter_unit_vector_x
-    old_left_wall_x = old_x - quarter_unit_vector_y
-    old_left_wall_y = old_y + quarter_unit_vector_x
+    old_outer_right_x = outer_right_a * old_tip_x + outer_right_b * old_tip_y
+    old_outer_right_y = outer_right_c * old_tip_x + outer_right_d * old_tip_y
+    old_outer_right_x = old_outer_right_x + old_x
+    old_outer_right_y = old_outer_right_y + old_y
 
     # rotate the points to their new coordinates
     row1 = a * old_x + b * old_y
     row2 = c * old_x + d * old_y
     new_point = (row1, row2)
 
-    # rotate the walls to their new coordinates
-    inner_wall_x = a * old_inner_wall_x + b * old_inner_wall_y
-    inner_wall_y = c * old_inner_wall_x + d * old_inner_wall_y
+    # rotate the vertices to their new coordinates
+    outer_left_x = a * old_outer_left_x + b * old_outer_left_y
+    outer_left_y = c * old_outer_left_x + d * old_outer_left_y
 
-    outer_wall_x = a * old_outer_wall_x + b * old_outer_wall_y
-    outer_wall_y = c * old_outer_wall_x + d * old_outer_wall_y
+    inner_left_x = a * old_inner_left_x + b * old_inner_left_y
+    inner_left_y = c * old_inner_left_x + d * old_inner_left_y
 
-    right_wall_x = a * old_right_wall_x + b * old_right_wall_y
-    right_wall_y = c * old_right_wall_x + d * old_right_wall_y
+    inner_right_x = a * old_inner_right_x + b * old_inner_right_y
+    inner_right_y = c * old_inner_right_x + d * old_inner_right_y
 
-    left_wall_x = a * old_left_wall_x + b * old_left_wall_y
-    left_wall_y = c * old_left_wall_x + d * old_left_wall_y
+    outer_right_x = a * old_outer_right_x + b * old_outer_right_y
+    outer_right_y = c * old_outer_right_x + d * old_outer_right_y
 
     # store all the information about the new clip plot in an object
     new_macroplot[point_names[i]] = {
         "name": point_names[i],
         "x": row1,
         "y": row2,
-        "inner_wall_x": inner_wall_x,
-        "inner_wall_y": inner_wall_y,
-        "outer_wall_x": outer_wall_x,
-        "outer_wall_y": outer_wall_y,
-        "right_wall_x": right_wall_x,
-        "right_wall_y": right_wall_y,
-        "left_wall_x": left_wall_x,
-        "left_wall_y": left_wall_y
+        
     }
 
     # put the locations into lists for plotting
     new_xs.append(row1)
     new_ys.append(row2)
-    inner_wall_xs.append(inner_wall_x)
-    inner_wall_ys.append(inner_wall_y)
-    outer_wall_xs.append(outer_wall_x)
-    outer_wall_ys.append(outer_wall_y)
-    right_wall_xs.append(right_wall_x)
-    right_wall_ys.append(right_wall_y)
-    left_wall_xs.append(left_wall_x)
-    left_wall_ys.append(left_wall_y)
+    outer_left_xs.append(outer_left_x)
+    outer_left_ys.append(outer_left_y)
+
+    inner_left_xs.append(inner_left_x)
+    inner_left_ys.append(inner_left_y)
+
+    inner_right_xs.append(inner_right_x)
+    inner_right_ys.append(inner_right_y)
+
+    outer_right_xs.append(outer_right_x)
+    outer_right_ys.append(outer_right_y)
 
 for value in new_macroplot.values():
-    if value["name"] == 'e2.5':
-        print(value)
+    print(value)
+
+# with open(output_location, 'w') as output:
+#     json.dump(new_macroplot, output)
 
 plt.scatter(new_xs, new_ys)
-plt.scatter(inner_wall_xs, inner_wall_ys, color='orange', alpha=0.33)
-plt.scatter(outer_wall_xs, outer_wall_ys, color='orange', alpha=0.33)
-plt.scatter(right_wall_xs, right_wall_ys, color='purple', alpha=0.33)
-plt.scatter(left_wall_xs, left_wall_ys, color='green', alpha=0.33)
+plt.scatter(outer_left_xs, outer_left_ys, color='orange')
+plt.scatter(inner_left_xs, inner_left_ys, color='orange')
+plt.scatter(inner_right_xs, inner_right_ys, color='orange')
+plt.scatter(outer_right_xs, outer_right_ys, color='orange')
 plt.axis('equal')
-# plt.show()
+plt.show()
