@@ -193,8 +193,8 @@ for i in range(3):
 
     file_name = f'coordinates_macroplot{macroplot_num}'
     output_location = os.path.join(output_path, f'{file_name}.json')
-    with open(output_location, 'w') as output:
-        json.dump(new_macroplot, output)
+    # with open(output_location, 'w') as output:
+    #     json.dump(new_macroplot, output)
 
     plt.scatter(new_xs, new_ys)
     plt.scatter(outer_left_xs, outer_left_ys, color='orange')
