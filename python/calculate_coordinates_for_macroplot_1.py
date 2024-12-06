@@ -160,7 +160,14 @@ for i in range(24):
         "name": point_names[i],
         "x": row1,
         "y": row2,
-        
+        "outer_left_x": outer_left_x,
+        "outer_left_y": outer_left_y,
+        "inner_left_x": inner_left_x,
+        "inner_left_y": inner_left_y,
+        "inner_right_x": inner_right_x,
+        "inner_right_y": inner_right_y,
+        "outer_right_x": outer_right_x,
+        "outer_right_y": outer_right_y
     }
 
     # put the locations into lists for plotting
