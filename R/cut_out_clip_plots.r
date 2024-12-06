@@ -1,21 +1,40 @@
 require(lidR)
+library("rjson")
+require(sf)
 
-input.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/third_modded_HEF_0001_20231127_1.las"
-output.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/clip_plot.las"
+input.las <- "C:/Users/js81535/Desktop/lidar_scan_calibration/third_modded_HEF_0001_20231127_1.las"
+coordinates.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/coordinates.json"
+output.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/clip_plot_las"
 
-las <- readLAS(input.path)
+las <- readLAS(input.las)
+coordinates <- fromJSON(file = coordinates.path)
 
-#inner_wall_x <- -0.5747529553555284
-inner_wall_y <- 2.175352624360034
-#outer_wall_x <- -0.7024758343234235
-outer_wall_y <- 2.6587643186622634
-right_wall_x <- -0.39690854768836115
-#right_wall_y <- 2.4809199109950963
-left_wall_x <- -0.8803202419905909
-#left_wall_y <- 2.353197032027201
+for (clip.plot in coordinates) {
+  name <- clip.plot$name
+  
+  outer_left_x <- clip.plot$outer_left_x
+  outer_left_y <- clip.plot$outer_left_y
+  inner_left_x <- clip.plot$inner_left_x
+  inner_left_y <- clip.plot$inner_left_y
+  inner_right_x <- clip.plot$inner_right_x
+  inner_right_y <- clip.plot$inner_right_y
+  outer_right_x <- clip.plot$outer_right_x
+  outer_right_y <- clip.plot$outer_right_y
+  
+  coords <- matrix(c(outer_left_x, outer_left_y,
+                     inner_left_x, inner_left_y,
+                     inner_right_x, inner_right_y,
+                     outer_right_x, outer_right_y,
+                     outer_left_x, outer_left_y),
+                   ncol = 2, byrow = TRUE)
+  
+  cp_polygon <- st_polygon(list(coords))
 
-clip.plot.las <- clip_rectangle(las, xleft = left_wall_x, ybottom = inner_wall_y, xright = right_wall_x, ytop = outer_wall_y)
+  clip.plot.las <- clip_roi(las, cp_polygon)
 
-#plot(clip.plot.las)
+  #plot(clip.plot.las)
 
-#writeLAS(clip.plot.las, output.path)
+  writeLAS(clip.plot.las, file.path(output.path, paste(name, '.las')))
+  
+}
+
