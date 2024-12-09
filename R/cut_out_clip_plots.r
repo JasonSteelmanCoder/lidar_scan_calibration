@@ -47,7 +47,7 @@ for (i in 1:3) {
   
     #plot(clip.plot.las)
   
-    writeLAS(clip.plot.las, file.path(output_list[[i]], paste(name, '.las')))
+    writeLAS(clip.plot.las, file.path(output_list[[i]], paste(name, '.las', sep = '')))
   }
 }
 
