@@ -60,7 +60,7 @@ point_names = [
     "w5"
 ]
 
-degrees_rotation = [104.8, 259.8, 224.2]
+degrees_rotation = [104.8, -0.6, 134.2]
 
 for i in range(3):
     macroplot_num = str(i + 1)
@@ -193,8 +193,8 @@ for i in range(3):
 
     file_name = f'coordinates_macroplot{macroplot_num}'
     output_location = os.path.join(output_path, f'{file_name}.json')
-    # with open(output_location, 'w') as output:
-    #     json.dump(new_macroplot, output)
+    with open(output_location, 'w') as output:
+        json.dump(new_macroplot, output)
 
     plt.scatter(new_xs, new_ys)
     plt.scatter(outer_left_xs, outer_left_ys, color='orange')
