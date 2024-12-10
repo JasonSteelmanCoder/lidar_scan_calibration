@@ -20,6 +20,7 @@ input_data = input_data[input_data["biomass_type"] != "X1000hr"]
 print(input_data)
 types_per_plot = int(len(input_data) / 3)
 
+# plot the curves for each individual type of biomass (not for totals)
 plt.figure()
 for i in range(3):
     for j in range(types_per_plot):
@@ -32,7 +33,7 @@ for i in range(3):
 
             n = np.linspace(1, 24, 24)
             margin_of_error = (Z * sigma) / np.sqrt(n)            # calculate half the width of a 95% confidence interval
-            if margin_of_error[1] != 0:
+            if margin_of_error[1] != 0:                     # filter out curves that have no data
                 sum_xy = n + margin_of_error
 
                 plt.subplot(1, 3, i + 1)                 # make three plots on one panel
@@ -55,6 +56,7 @@ for i in range(3):
 plt.tight_layout(w_pad=-2)
 plt.show()
 
+# plot the curve for totals (total_biomass and fine_dead_fuels)
 plt.figure()
 for i in range(3):
     for j in range(types_per_plot):
@@ -66,7 +68,7 @@ for i in range(3):
             sigma = input_data.iloc[j + i * types_per_plot, 3]          # the standard deviation of the biomass on observed clip plots
 
             n = np.linspace(1, 24, 24)
-            margin_of_error = (Z * sigma) / np.sqrt(n)            # calculate half the width of a 95% confidence interval
+            margin_of_error = (Z * sigma) / np.sqrt(n)            # calculate *half* the width of a 95% confidence interval
             sum_xy = n + margin_of_error
 
             plt.subplot(1, 3, i + 1)                 # make three plots on one panel
