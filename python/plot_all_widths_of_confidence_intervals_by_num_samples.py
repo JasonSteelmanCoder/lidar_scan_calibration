@@ -29,10 +29,14 @@ for i in range(3):
 
         n = np.linspace(1, 24, 24)
         W = np.sqrt((4 * (Z**2) * (sigma**2)) / (n))            # calculate the width of a 95% confidence interval (note that half of that CI will be on each side of the estimated mean)
-        # print(W)
+        sum_xy = n + W
 
         plt.subplot(1, 3, i + 1)                 # make three plots on one panel
         plt.plot(n, W, label = input_data.iloc[j + i * types_per_plot, 1], color=colors[j])
+
+        optimal_x = sum_xy.argmin() + 1
+        optimal_y = W[sum_xy.argmin()]
+        plt.plot(optimal_x, optimal_y, 'o', color=colors[j])     # plots the tip of the elbow
 
     plt.suptitle("CI Width For The Est'd Mean Biomass Per 1/4 m^2")
     plt.title(f"Macroplot {input_data.iloc[j + i * types_per_plot, 0]}")
