@@ -27,10 +27,11 @@ by_clip_plot_df$PN <- by_clip_plot_df$PN.x + by_clip_plot_df$PN.y
 by_clip_plot_df$Wlit.BL <- by_clip_plot_df$Wlit.BL.x + by_clip_plot_df$Wlit.BL.y
 by_clip_plot_df$Wlive.BL <- by_clip_plot_df$Wlive.BL.x + by_clip_plot_df$Wlive.BL.y
 by_clip_plot_df$total_biomass <- by_clip_plot_df$X1000hr.x + by_clip_plot_df$X1000hr.y + by_clip_plot_df$X100hr.x + by_clip_plot_df$X100hr.y + by_clip_plot_df$X10hr.x + by_clip_plot_df$X10hr.y + by_clip_plot_df$X1hr.x + by_clip_plot_df$X1hr.y + by_clip_plot_df$CL.x + by_clip_plot_df$CL.y + by_clip_plot_df$ETE.x + by_clip_plot_df$ETE.y + by_clip_plot_df$FL.x + by_clip_plot_df$FL.y + by_clip_plot_df$PC.x + by_clip_plot_df$PC.y + by_clip_plot_df$PN.x + by_clip_plot_df$PN.y + by_clip_plot_df$Wlit.BL.x + by_clip_plot_df$Wlit.BL.y + by_clip_plot_df$Wlive.BL.x + by_clip_plot_df$Wlive.BL.y
+by_clip_plot_df$fine_dead_fuels <- by_clip_plot_df$CL.x + by_clip_plot_df$CL.y + by_clip_plot_df$ETE.x + by_clip_plot_df$ETE.y + by_clip_plot_df$FL.x + by_clip_plot_df$FL.y + by_clip_plot_df$PN.x + by_clip_plot_df$PN.y + by_clip_plot_df$Wlit.BL.x + by_clip_plot_df$Wlit.BL.y
 print(by_clip_plot_df)
 
 # purge redundant columns
-by_clip_plot_df <- by_clip_plot_df[, c("Macroplot", "Clip.Plot", "X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL", "total_biomass")]
+by_clip_plot_df <- by_clip_plot_df[, c("Macroplot", "Clip.Plot", "X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL", "total_biomass", "fine_dead_fuels")]
 
 print(input_weights)
 print(by_clip_plot_df)
@@ -50,21 +51,22 @@ weighted_masses_df$PN <- weighted_masses_df$PN.x * weighted_masses_df$PN.y
 weighted_masses_df$Wlit.BL <- weighted_masses_df$Wlit.BL.x * weighted_masses_df$Wlit.BL.y
 weighted_masses_df$Wlive.BL <- weighted_masses_df$Wlive.BL.x * weighted_masses_df$Wlive.BL.y
 weighted_masses_df$total_biomass <- weighted_masses_df$total_biomass.x * weighted_masses_df$total_biomass.y
+weighted_masses_df$fine_dead_fuels <- weighted_masses_df$fine_dead_fuels.x * weighted_masses_df$fine_dead_fuels.y
 
 # filter out redundant columns
-weighted_masses_df <- weighted_masses_df[, c("Macroplot", "Clip.Plot", "X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL", "total_biomass")]
+weighted_masses_df <- weighted_masses_df[, c("Macroplot", "Clip.Plot", "X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL", "total_biomass", "fine_dead_fuels")]
 
 print(weighted_masses_df)
 
 
 # initialize output columns
-macroplot <- c(rep(1, 12), rep(2, 12), rep(3, 12))
-biomass_type <- c(rep(c("X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL", "total_biomass"), 3))
+macroplot <- c(rep(1, 13), rep(2, 13), rep(3, 13))
+biomass_type <- c(rep(c("X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC", "PN", "Wlit.BL", "Wlive.BL", "total_biomass", "fine_dead_fuels"), 3))
 weighted_mean_biomass <- c()
 weighted_standard_deviation <- c()
 
 # populate output columns
-for (i in 1:36) {              # there are 33 unique combinations of macroplot and biomass type, plus three rows for total_biomass
+for (i in 1:39) {              # there are 33 unique combinations of macroplot and biomass type, plus three rows for total_biomass
   
   weighted_biomass_values <- subset(weighted_masses_df, Macroplot == macroplot[[i]], select = biomass_type[[i]])
   weights <- subset(input_weights, Macroplot == macroplot[[i]], select = biomass_type[[i]])

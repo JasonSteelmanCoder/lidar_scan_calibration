@@ -30,7 +30,8 @@ autocorrelation_ranges = {
         "PN": 0.73,
         "Wlit.BL": 0.99,
         "Wlive.BL": 0.22, 
-        "total_biomass": 0.93
+        "total_biomass": 0.93,
+        "fine_dead_fuels": 2.4
     },
 
     2: {
@@ -45,7 +46,8 @@ autocorrelation_ranges = {
         "PN": 4.8,
         "Wlit.BL": 634,
         "Wlive.BL": 27,
-        "total_biomass": 0.63
+        "total_biomass": 0.63,
+        "fine_dead_fuels": 3.6
     },
     
     3: {
@@ -60,7 +62,8 @@ autocorrelation_ranges = {
         "PN": 116,
         "Wlit.BL": 31,
         "Wlive.BL": 22,
-        "total_biomass": 1.4
+        "total_biomass": 1.4,
+        "fine_dead_fuels": 3.3
     }
 }
 
@@ -95,7 +98,8 @@ initial_data = {
     "PN": [None] * 72,
     "Wlit.BL": [None] * 72,
     "Wlive.BL": [None] * 72,
-    "total_biomass": [None] * 72
+    "total_biomass": [None] * 72,
+    "fine_dead_fuels": [None] * 72
 }
 output = pd.DataFrame(initial_data)
 

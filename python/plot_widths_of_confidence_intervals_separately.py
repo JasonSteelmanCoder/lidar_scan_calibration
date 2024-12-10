@@ -20,7 +20,7 @@ samples_simulated = 5
 input_data = pd.read_csv(input_data_path)
 # print(input_data)
 
-for i in range(36):
+for i in range(39):
     fig = plt.figure(figsize=[9, 11])
     gs = gridspec.GridSpec(3, 1)
 

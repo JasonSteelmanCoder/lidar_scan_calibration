@@ -27,6 +27,7 @@ all_strata_data <- file_data %>%
     'Wlit.BL' = sum(Wlit.BL),
     'Wlive.BL' = sum(Wlive.BL),
     'total_biomass' = sum(X1000hr) + sum(X100hr) + sum(X10hr) + sum(X1hr) + sum(CL) + sum(ETE) + sum(FL) + sum(PC) + sum(PN) + sum(Wlit.BL) + sum(Wlive.BL),
+    'fine_dead_fuels' = sum(CL) + sum(ETE) + sum(FL) + sum(PN) + sum(Wlit.BL),
     .groups = 'keep'
   )
 #print(all_strata_data)
@@ -35,7 +36,7 @@ macroplot1_df <- subset(all_strata_data, Macroplot == 1)
 macroplot2_df <- subset(all_strata_data, Macroplot == 2)
 macroplot3_df <- subset(all_strata_data, Macroplot == 3)
 
-biomass_types <- names(all_strata_data)[6:17]
+biomass_types <- names(all_strata_data)[6:18]
 
 for (type in biomass_types) {
   
@@ -81,4 +82,3 @@ for (type in biomass_types) {
   }
 
 }
-
