@@ -76,7 +76,8 @@ for i in range(3):
 
             optimal_x = sum_xy.argmin() + 1
             optimal_y = margin_of_error[sum_xy.argmin()]
-            plt.plot(optimal_x, optimal_y, 'o', color=colors[j], alpha=0.5)     # plots the tip of the elbow
+            if optimal_x != 24:                                                 # when optimal_x = 24, the optimal x is actually outside the range of the curve
+                plt.plot(optimal_x, optimal_y, 'o', color=colors[j], alpha=0.5)     # plots the tip of the elbow
 
 
     plt.suptitle("Margin of Error For The Est'd Mean Biomass Per 1/4 m^2")
