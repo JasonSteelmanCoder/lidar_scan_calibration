@@ -15,7 +15,7 @@ input_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_cali
 # USER: enter the location of the input folder here
 output_folder = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/estimations_by_biomass_type"
 # USER: put the number of samples you want to simulate here
-samples_simulated = 3 
+samples_simulated = 5 
 
 input_data = pd.read_csv(input_data_path)
 # print(input_data)
