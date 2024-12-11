@@ -56,7 +56,7 @@ for i in range(39):
             plt.plot(optimal_x, optimal_y, 'bo')     # plots the tip of the elbow
             plt.text(optimal_x + 1, optimal_y + 1, f"clip plots for\nmin(x + y): {int(np.round(optimal_x, 0))}")
             plt.legend()
-            print(optimal_x, optimal_y)
+            # print(optimal_x, optimal_y)
         plt.ylabel("Margin of Error")
         plt.xlabel("Number of Clip Plots")
         plt.axis('equal')
@@ -66,8 +66,8 @@ for i in range(39):
     if margin_of_error[0] == 0:
         plt.text(0.5, 0.5, "No biomass found for this category", ha='center', va='center')
     else:
-        prediction_distribution = np.random.normal(input_data.iloc[i, 2], margin_of_error[samples_simulated - 1] / 2, 1000)
-        plt.hist(prediction_distribution, bins=50)
+        prediction_distribution = np.random.normal(input_data.iloc[i, 2], (margin_of_error[samples_simulated - 1] * np.sqrt(samples_simulated)) / Z, 10000)
+        plt.hist(prediction_distribution, bins=100)
         plt.xlabel("Mean Biomass")
         plt.ylabel("Count")
         plt.axvline(x=input_data.iloc[i, 2], c='red', label=f"Sample\nMean:\n{round(input_data.iloc[i, 2], 2)}")
