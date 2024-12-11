@@ -5,6 +5,7 @@ import numpy as np
 import os
 from dotenv import load_dotenv
 import pandas as pd
+from matplotlib.lines import Line2D
 
 load_dotenv()
 
@@ -46,7 +47,11 @@ for i in range(3):
 
     plt.suptitle("Margin of Error For The Est'd Mean Biomass Per 1/4 m^2")
     plt.title(f"Macroplot {input_data.iloc[j + i * types_per_plot, 0]}")
-    plt.legend()
+    point_label = Line2D([0], [0], marker='o', color='w', markerfacecolor='grey', alpha=0.5)
+    handles, labels = plt.gca().get_legend_handles_labels()
+    handles.append(point_label)
+    labels.append('min(x + y)')
+    plt.legend(handles=handles, labels=labels)
     plt.ylim([0, 130])
     plt.axis('equal')
     plt.ylabel("Margin of Error")
@@ -76,13 +81,18 @@ for i in range(3):
 
             optimal_x = sum_xy.argmin() + 1
             optimal_y = margin_of_error[sum_xy.argmin()]
-            if optimal_x != 24:                                                 # when optimal_x = 24, the optimal x is actually outside the range of the curve
+            if optimal_x != 24:                                                 # when optimal_x = 24, the optimal x is actually outside the range of the curve and shouldn't be plotted
                 plt.plot(optimal_x, optimal_y, 'o', color=colors[j], alpha=0.5)     # plots the tip of the elbow
+                plt.text(optimal_x + 0.5, optimal_y + 0.5, f"{int(optimal_x)}")
 
 
     plt.suptitle("Margin of Error For The Est'd Mean Biomass Per 1/4 m^2")
     plt.title(f"Macroplot {input_data.iloc[j + i * types_per_plot, 0]}")
-    plt.legend()
+    point_label = Line2D([0], [0], marker='o', color='w', markerfacecolor='grey', alpha=0.5)
+    handles, labels = plt.gca().get_legend_handles_labels()
+    handles.append(point_label)
+    labels.append('num clip plots\nfor min(x + y)')
+    plt.legend(handles=handles, labels=labels)
     plt.ylim([0, 130])
     plt.axis('equal')
     plt.ylabel("Margin of Error")
