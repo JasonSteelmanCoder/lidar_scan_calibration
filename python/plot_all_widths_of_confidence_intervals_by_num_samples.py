@@ -1,5 +1,7 @@
-# This script makes three plots, each one representing a macroplot. On each plot there are several curves. Each curve represents the margin of error for one 
+# This script makes two panels, each with three plots, each plot representing a macroplot. 
+# On each plot there are several curves. Each curve represents the margin of error for one 
 # type of biomass on that macroplot for each number of clip plots from 1 to 24. 
+# The first panel represents the separate biomass types. The second panel has totals.
 import matplotlib.pyplot as plt
 import numpy as np
 import os
