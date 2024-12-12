@@ -1,3 +1,7 @@
+# This script makes variogram panels that combine all macroplots, but are broken out by strata.
+# multiplot variograms will populate to the folder that the script is in
+# clip plot centers have been adjusted
+
 library(automap)
 library(sp)
 library(dplyr)
@@ -6,7 +10,7 @@ library(png)
 library(magick)
 library(glue)
 
-input.csv <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/HEF Biomass 2024 multiplot.csv'
+input.csv <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/HEF Biomass 2024 multiplot.csv'
 file_data <- read.csv(input.csv)
 
 low_stratum <- subset(file_data, Stratum == '0-30')
