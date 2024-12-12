@@ -1,3 +1,7 @@
+# This script kriges each macroplot for each biomass type. 
+# It outputs png images of kriged plots and a csv with apparent biomass, weighted biomass, and kriged biomass
+# This script has been adjusted for clip plot centers.
+
 library(gstat)
 library(sp)
 library(automap)
@@ -14,8 +18,18 @@ output.csv <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/kriged_b
 image.output.folder <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/kriged_images/'
 file_data <- read.csv(input.csv)
 
-file_data$X <- as.numeric(str_extract(file_data$Coordinates, "(-)?\\d+(\\.\\d+)?"))
-file_data$Y <- as.numeric(str_extract(file_data$Coordinates, "((-)?\\d+(\\.\\d+)?)\\]", group=1))
+# extract the edge coordinates from the names of the clip plots
+file_data$nominal_X <- as.numeric(str_extract(file_data$Coordinates, "(-)?\\d+(\\.\\d+)?"))
+file_data$nominal_Y <- as.numeric(str_extract(file_data$Coordinates, "((-)?\\d+(\\.\\d+)?)\\]", group=1))
+
+# make the edge coordinates into the center coordinates for each clip plot
+file_data$magnitude <- sqrt(file_data$nominal_X^2 + file_data$nominal_Y^2)
+file_data$multiples_of_quarter <- file_data$magnitude / 0.25
+file_data$quarter_X <- file_data$nominal_X / file_data$multiples_of_quarter
+file_data$quarter_Y <- file_data$nominal_Y / file_data$multiples_of_quarter
+file_data$X <- file_data$nominal_X + file_data$quarter_X
+file_data$Y <- file_data$nominal_Y + file_data$quarter_Y
+
 
 file_data <- file_data %>%
   group_by(Macroplot, Clip.Plot, Coordinates, X, Y) %>%
