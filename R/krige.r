@@ -46,6 +46,7 @@ file_data <- file_data %>%
     'Wlit.BL' = sum(Wlit.BL),
     'Wlive.BL' = sum(Wlive.BL),
     'total_biomass' = sum(X1000hr) + sum(X100hr) + sum(X10hr) + sum(X1hr) + sum(CL) + sum(ETE) + sum(FL) + sum(PC) + sum(PN) + sum(Wlit.BL) + sum(Wlive.BL),
+    'fine_dead_fuels' = sum(CL) + sum(ETE) + sum(FL) + sum(PN) + sum(Wlit.BL),
     .groups = 'keep'
   )
 
@@ -53,7 +54,7 @@ macroplot1 <- subset(file_data, Macroplot == 1)
 macroplot2 <- subset(file_data, Macroplot == 2)
 macroplot3 <- subset(file_data, Macroplot == 3)
 
-biomass_types <- names(file_data)[6:17]
+biomass_types <- names(file_data)[6:18]
 print(biomass_types)
 
 biomass_estimates <- read.csv(previous.estimations.csv)
@@ -107,7 +108,10 @@ for (type in biomass_types) {
       labs(title = paste("Macroplot", i, '\n', data_name, sep = ' '), fill = "Prediction")
     #print(this_plot)
     file_name <- paste(clean_data_name, '.png', sep = '')
+    
+    # save plots to image file
     ggsave(file.path(image.output.folder, file_name), this_plot)
+    
     #print(c(paste("Macroplot", i, data_name, sep = ' '), sum(kriged$var1.pred)))
     total <- sum(kriged$var1.pred)
     if (is.na(total)) {
