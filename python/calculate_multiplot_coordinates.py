@@ -61,4 +61,4 @@ plt.scatter(df["multiplot_x"], df["multiplot_y"])
 plt.show()
 
 # uncomment to save to csv
-df.to_csv(output_file, index=False)
+# df.to_csv(output_file, index=False)
