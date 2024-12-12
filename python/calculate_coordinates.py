@@ -1,3 +1,6 @@
+# this program outputs the coordinates of clip plots, rotated to the coordinate system of the lidar scan that they belong to.
+# this program has been adjusted for clip plot center
+
 import os
 import math
 import matplotlib.pyplot as plt
@@ -109,8 +112,16 @@ for i in range(3):
     for i in range(24):
         point = coordinate_pairs[i]
 
-        old_x = point[0]
-        old_y = point[1]
+        nominal_old_x = point[0]
+        nominal_old_y = point[1]
+
+        # adjust coordinates for clip plot center instead of clip plot edge
+        magnitude = np.sqrt(nominal_old_x**2 + nominal_old_y**2)
+        multiples_of_quarter = magnitude / 0.25
+        quarter_x = nominal_old_x / multiples_of_quarter
+        quarter_y = nominal_old_y / multiples_of_quarter
+        old_x = nominal_old_x + quarter_x
+        old_y = nominal_old_y + quarter_y
 
         # find locations of the clip plot's original vertices
         distance_from_origin = np.sqrt(old_x**2 + old_y**2)
