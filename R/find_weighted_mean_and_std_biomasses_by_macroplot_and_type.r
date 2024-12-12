@@ -1,6 +1,7 @@
 # This program will look at each biomass type in 3 macroplots.
 # It will find *weighted* mean biomasses and standard deviations of biomasses for each combination of macroplot and type.
 # strata that come from the same clip plot will be summed to find total biomass represented by each clip plot
+# this program has been adjusted for clip plot center
 
 library(dplyr)
 
