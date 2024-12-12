@@ -69,11 +69,11 @@ for pair in coordinate_pairs:
     new_coords.append((new_x, new_y))
 
 # plot the coordinates to show the layout of the macroplot
-x_coords, y_coords = zip(*coordinate_pairs)
-plt.scatter(x_coords, y_coords)
-new_x_coords, new_y_coords = zip(*new_coords)
-plt.scatter(new_x_coords, new_y_coords)
-plt.axis('equal')
-plt.show()
+# x_coords, y_coords = zip(*coordinate_pairs)
+# plt.scatter(x_coords, y_coords)
+# new_x_coords, new_y_coords = zip(*new_coords)
+# plt.scatter(new_x_coords, new_y_coords)
+# plt.axis('equal')
+# plt.show()
 
-
+print(new_coords)
