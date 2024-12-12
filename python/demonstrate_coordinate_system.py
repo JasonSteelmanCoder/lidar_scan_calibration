@@ -56,6 +56,7 @@ coordinate_pairs = [
 # plot the coordinates to show the layout of the macroplot
 x_coords, y_coords = zip(*coordinate_pairs)
 plt.scatter(x_coords, y_coords)
+plt.axis('equal')
 plt.show()
 plt.clf()
 
