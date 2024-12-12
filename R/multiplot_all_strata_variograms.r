@@ -1,3 +1,6 @@
+# This program makes single variograms that combine all strata and all macroplots.
+# It has been adjusted for clip plot centers
+
 library(automap)
 library(sp)
 library(dplyr)
