@@ -1,6 +1,7 @@
 # this script will find a weights matrix to compensate for spatial autocorrelation when calculating a weighted mean or weighted standard deviation
 # of clip plot biomass values
 # this will be done by macroplot, with high and low strata summed into one biomass value per clip plot
+# this has been adjusted for clip plot centers
 
 import pandas as pd
 import os
@@ -20,50 +21,50 @@ output_data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_cal
 autocorrelation_ranges = {
     1: {
         "X1000hr": None,
-        "X100hr": 0.66,
-        "X10hr": 0.25,
-        "X1hr": 0.19,
+        "X100hr": 0.72,
+        "X10hr": 1.5,
+        "X1hr": 0.25,
         "CL": 1,
-        "ETE": 24,
+        "ETE": 5.1,
         "FL": 1.3,
-        "PC": 21,
-        "PN": 0.73,
-        "Wlit.BL": 0.99,
-        "Wlive.BL": 0.22, 
-        "total_biomass": 0.93,
-        "fine_dead_fuels": 2.4
+        "PC": 23,
+        "PN": 0.85,
+        "Wlit.BL": 2.5,
+        "Wlive.BL": 0.28,
+        "total_biomass": 0.95,
+        "fine_dead_fuels": 1.7
     },
 
     2: {
         "X1000hr": None,
-        "X100hr": 0.43,
-        "X10hr": 0.54,
-        "X1hr": 5.2,
-        "CL": 0.84,
-        "ETE": 0.63,
-        "FL": 0.7,
-        "PC": 7.5,
-        "PN": 4.8,
-        "Wlit.BL": 634,
-        "Wlive.BL": 27,
-        "total_biomass": 0.63,
-        "fine_dead_fuels": 3.6
+        "X100hr": 0.39,
+        "X10hr": 2.2,
+        "X1hr": 5.7,
+        "CL": 2.2,
+        "ETE": 2.4,
+        "FL": 0.78,
+        "PC": 7,
+        "PN": 4.6,
+        "Wlit.BL": 422,
+        "Wlive.BL": 15,
+        "total_biomass": 2,
+        "fine_dead_fuels": 3.4
     },
     
     3: {
-        "X1000hr": 1.4,
+        "X1000hr": 0.34,
         "X100hr": None,
-        "X10hr": 3.7,
-        "X1hr": 2.5,
-        "CL": 0.6,
-        "ETE": 4.1,
+        "X10hr": 2.8,
+        "X1hr": 3.3,
+        "CL": 2.3,
+        "ETE": 2.9,
         "FL": 1.2,
-        "PC": 8.3,
-        "PN": 116,
-        "Wlit.BL": 31,
-        "Wlive.BL": 22,
-        "total_biomass": 1.4,
-        "fine_dead_fuels": 3.3
+        "PC": 3.6,
+        "PN": 175,
+        "Wlit.BL": 11,
+        "Wlive.BL": 38,
+        "total_biomass": 1.5,
+        "fine_dead_fuels": 2.6
     }
 }
 
@@ -121,16 +122,33 @@ for i in range(3):
                 continue
             else:
                 list_coords = ast.literal_eval(plot["Coordinates"][k])
-                x = list_coords[0]
-                y = list_coords[1]
-                
+                nominal_x = list_coords[0]
+                nominal_y = list_coords[1]
+
+                # adjust for the centers of clip plots
+                magnitude = np.sqrt(nominal_x**2 + nominal_y**2)
+                multiples_of_quarter = magnitude / 0.25
+                quarter_x = nominal_x / multiples_of_quarter
+                quarter_y = nominal_y / multiples_of_quarter
+                x = nominal_x + quarter_x
+                y = nominal_y + quarter_y
+
                 distances = []
                 curved_distances = []
 
                 for coord_pair in plot["Coordinates"]:
                     neighbor_coords = ast.literal_eval(coord_pair)
-                    neighbor_x = neighbor_coords[0]
-                    neighbor_y = neighbor_coords[1]
+                    neighbor_nominal_x = neighbor_coords[0]
+                    neighbor_nominal_y = neighbor_coords[1]
+
+                    # adjust for the centers of clip plots
+                    neighbor_magnitude = np.sqrt(neighbor_nominal_x**2 + neighbor_nominal_y**2)
+                    neighbor_multiples_of_quarter = neighbor_magnitude / 0.25
+                    neighbor_quarter_x = neighbor_nominal_x / neighbor_multiples_of_quarter
+                    neighbor_quarter_y = neighbor_nominal_y / neighbor_multiples_of_quarter
+                    neighbor_x = neighbor_nominal_x + neighbor_quarter_x
+                    neighbor_y = neighbor_nominal_y + neighbor_quarter_y
+
 
                     distance = np.sqrt((x - neighbor_x)**2 + (y - neighbor_y)**2)
                     if distance < autocorrelation_range and distance > 0:
