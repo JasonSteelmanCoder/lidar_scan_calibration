@@ -1,3 +1,7 @@
+# this program makes a panel of two variograms--one for each stratum.
+# the variograms represent total biomass for their strata across all three macroplots
+# coordinates have been adjusted for clip plot centers
+
 library(automap)
 library(sp)
 library(dplyr)
@@ -6,7 +10,7 @@ library(png)
 library(magick)
 library(glue)
 
-input.csv <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/HEF Biomass 2024 multiplot.csv'
+input.csv <- 'C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/HEF Biomass 2024 multiplot.csv'
 file_data <- read.csv(input.csv)
 
 file_data$total.biomass <- file_data$X1000hr + file_data$X100hr + file_data$X10hr + file_data$X1hr + file_data$CL + file_data$ETE + file_data$FL + file_data$PC + file_data$PN + file_data$Wlit.BL + file_data$Wlive.BL
