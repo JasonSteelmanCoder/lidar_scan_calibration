@@ -1,8 +1,7 @@
 # this script finds and records the multi-plot coordinates of all clipplots 
 # by translating the single-plot coordinates of macroplots 2 and 3 by the 
 # distances and directions of their centers from the center of macroplot 1.
-
-# (adjusted for clip plot edge vs clip plot center?)
+# adjusted for clip plot edge vs clip plot center
 
 from dotenv import load_dotenv
 import os
