@@ -1,3 +1,6 @@
+# find variogram panels broken out by stratum and macroplot
+# this has been adjusted for clip plot centers
+
 library(automap)
 library(sp)
 library(dplyr)
