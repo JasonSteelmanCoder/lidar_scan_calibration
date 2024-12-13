@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os
+import json
 
+output_location = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/pixel_dimensions.json'
 radius = 10
 pixel_width = 0.5
 
@@ -104,11 +107,27 @@ for corner in quad4_corners:
     )
     pixels.append(pixel)
 
+dimensions = []
 
-for pixel in pixels:
-    xs = [pixel[0][0], pixel[1][0], pixel[2][0], pixel[3][0], pixel[0][0]]
-    ys = [pixel[0][1], pixel[1][1], pixel[2][1], pixel[3][1], pixel[0][1]]
-    plt.plot(xs, ys)
-plt.axis('equal')
-plt.show()
+for i in range(len(pixels)):
+    x1 = pixels[i][0][0]
+    y1 = pixels[i][0][1]
+    x2 = pixels[i][2][0]
+    y2 = pixels[i][2][1]
+    dimension = [x1, y1, x2, y2]
+    dimensions.append(dimension)
+    print(dimension)
+
+with open(output_location, 'w') as output_file:
+    json.dump(dimensions, output_file)
+
+
+# print(len(pixels))
+
+# for pixel in pixels:
+#     xs = [pixel[0][0], pixel[1][0], pixel[2][0], pixel[3][0], pixel[0][0]]
+#     ys = [pixel[0][1], pixel[1][1], pixel[2][1], pixel[3][1], pixel[0][1]]
+#     plt.plot(xs, ys)
+# plt.axis('equal')
+# plt.show()
 
