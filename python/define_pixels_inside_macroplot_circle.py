@@ -5,7 +5,7 @@ import json
 
 output_location = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/pixel_dimensions.json'
 radius = 10
-pixel_width = 0.5
+pixel_width = 1.0
 
 x = np.linspace(0, radius)
 y = np.sqrt(radius**2 - x**2)
