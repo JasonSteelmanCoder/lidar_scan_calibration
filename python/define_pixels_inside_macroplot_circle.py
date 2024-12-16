@@ -32,7 +32,7 @@ for xi in np.arange(pixel_width, 11, pixel_width):
 
 pixels = []
 
-for corner in quad1_corners:
+for corner in quad1_corners[1:]:        # the [1:] slice excludes the pixel closest to the center, since that one has part of the donut hole cutting through it.
     top_right_x = corner[0]
     top_right_y = corner[1]
     top_left_x = top_right_x - pixel_width
@@ -51,7 +51,7 @@ for corner in quad1_corners:
     pixels.append(pixel)
 
 
-for corner in quad2_corners:
+for corner in quad2_corners[1:]:
     top_left_x = corner[0]
     top_left_y = corner[1]
     bottom_left_x = top_left_x
@@ -70,7 +70,7 @@ for corner in quad2_corners:
     pixels.append(pixel)
 
 
-for corner in quad3_corners:
+for corner in quad3_corners[1:]:
     bottom_left_x = corner[0]
     bottom_left_y = corner[1]
     bottom_right_x = bottom_left_x + pixel_width
@@ -89,7 +89,7 @@ for corner in quad3_corners:
     pixels.append(pixel)
 
 
-for corner in quad4_corners:
+for corner in quad4_corners[1:]:
     bottom_right_x = corner[0]
     bottom_right_y = corner[1]
     top_right_x = bottom_right_x
@@ -118,16 +118,16 @@ for i in range(len(pixels)):
     dimensions.append(dimension)
     print(dimension)
 
-with open(output_location, 'w') as output_file:
-    json.dump(dimensions, output_file)
+# with open(output_location, 'w') as output_file:
+#     json.dump(dimensions, output_file)
 
 
 # print(len(pixels))
 
-# for pixel in pixels:
-#     xs = [pixel[0][0], pixel[1][0], pixel[2][0], pixel[3][0], pixel[0][0]]
-#     ys = [pixel[0][1], pixel[1][1], pixel[2][1], pixel[3][1], pixel[0][1]]
-#     plt.plot(xs, ys)
-# plt.axis('equal')
-# plt.show()
+for pixel in pixels:
+    xs = [pixel[0][0], pixel[1][0], pixel[2][0], pixel[3][0], pixel[0][0]]
+    ys = [pixel[0][1], pixel[1][1], pixel[2][1], pixel[3][1], pixel[0][1]]
+    plt.plot(xs, ys)
+plt.axis('equal')
+plt.show()
 
