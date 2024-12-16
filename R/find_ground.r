@@ -13,7 +13,12 @@ new.las <- classify_ground(las, mycsf)
 cropped.las <- clip_circle(new.las, 0, 0, 10)
 #plot(cropped.las, color = "Classification")
 
-only.ground.las <- filter_poi(cropped.las, Classification != 2)
-plot(only.ground.las, color = 'Z', legend = TRUE)
+norm.las <- normalize_height(cropped.las, tin())
+plot(norm.las, color = "Classification")
+
+# plot only the ground
+# change == to != to plot everything but ground
+#only.ground.las <- filter_poi(cropped.las, Classification == 2)
+#plot(only.ground.las, color = 'Z', legend = TRUE)
 
 
