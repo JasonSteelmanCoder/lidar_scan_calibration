@@ -67,7 +67,7 @@ weighted_mean_biomass <- c()
 weighted_standard_deviation <- c()
 
 # populate output columns
-for (i in 1:39) {              # there are 33 unique combinations of macroplot and biomass type, plus three rows for total_biomass
+for (i in 1:39) {              # there are 33 unique combinations of macroplot and biomass type, plus 3 rows for total_biomass and 3 for fine_dead_fuels
   
   weighted_biomass_values <- subset(weighted_masses_df, Macroplot == macroplot[[i]], select = biomass_type[[i]])
   weights <- subset(input_weights, Macroplot == macroplot[[i]], select = biomass_type[[i]])
