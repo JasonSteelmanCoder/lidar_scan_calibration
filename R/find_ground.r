@@ -12,16 +12,16 @@ output.las3 <- "C:/Users/js81535/Desktop/lidar_scan_calibration/normalized_macro
 
 outputs.list <- c(output.las1, output.las2, output.las3)
 
-for (i in 1:3) {
+for (i in 1) {
   las_location <- inputs.list[[i]]
   las <- readLAS(las_location)
   
   mycsf <- csf(FALSE, class_threshold = 0.1, cloth_resolution = 0.15) # intelimon settings: TRUE, class_threshold = 0.5, cloth_resolution = 0.25, time_step = 0.65
   new.las <- classify_ground(las, mycsf)
   cropped.las <- clip_circle(new.las, 0, 0, 10)
-  #plot(cropped.las, color = "Classification")
+  plot(cropped.las, color = "Classification")
   
-  norm.las <- normalize_height(cropped.las, tin())
+  #norm.las <- normalize_height(cropped.las, tin())
   #plot(norm.las, color = "Classification")
   
   # plot only the ground
@@ -29,7 +29,7 @@ for (i in 1:3) {
   #only.ground.las <- filter_poi(cropped.las, Classification != 2)
   #plot(only.ground.las, color = 'Z', legend = TRUE)
 
-  writeLAS(norm.las, outputs.list[[i]])
+  #writeLAS(norm.las, outputs.list[[i]])
   
 }
 
