@@ -45,8 +45,7 @@ for j in range(type_count):
             plt.plot(optimal_x, optimal_y, 'o', color=colors[j], alpha=0.5)     # plots the tip of the elbow
 
 
-plt.suptitle("Margin of Error For The Est'd Mean Biomass Per 1/4 m^2")
-plt.title(f"Macroplot {input_data.iloc[j, 0]}")
+plt.title("Margin of Error For The Est'd Mean Biomass Per 1/4 m^2")
 point_label = Line2D([0], [0], marker='o', color='w', markerfacecolor='grey', alpha=0.5)
 handles, labels = plt.gca().get_legend_handles_labels()
 handles.append(point_label)
@@ -85,8 +84,7 @@ for j in range(type_count):
             plt.text(optimal_x + 0.5, optimal_y + 0.5, f"{int(optimal_x)}")
 
 
-plt.suptitle("Margin of Error For The Est'd Mean Biomass Per 1/4 m^2")
-plt.title(f"{input_data.iloc[j, 0]}")
+plt.title("Margin of Error For The Est'd Mean Biomass Per 1/4 m^2")
 point_label = Line2D([0], [0], marker='o', color='w', markerfacecolor='grey', alpha=0.5)
 handles, labels = plt.gca().get_legend_handles_labels()
 handles.append(point_label)
