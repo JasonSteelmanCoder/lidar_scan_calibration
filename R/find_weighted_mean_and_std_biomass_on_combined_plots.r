@@ -65,26 +65,36 @@ biomass_type <- c("X1000hr", "X100hr", "X10hr", "X1hr", "CL", "ETE", "FL", "PC",
 weighted_mean_biomass <- c()
 weighted_standard_deviation <- c()
 
+# loop through the biomass types
 # populate output columns
-for (i in 1:13) {              # there are 11 biomass types, plus 1 rows for total_biomass and 1 for fine_dead_fuels
+for (i in 1:13) {              # there are 11 biomass types, plus 1 row for total_biomass and 1 for fine_dead_fuels
   
   weighted_biomass_values <- weighted_masses_df[biomass_type[[i]]]
+  
   weights <- input_weights[biomass_type[[i]]]
+  
   if (sum(weights) == 0) {
     this_mean <- 0          # prevent divide by zero
   } else {
     this_mean <- sum(weighted_biomass_values) / sum(weights)
   }
+  
+  ## append the mean to the weighted means
   weighted_mean_biomass <- c(weighted_mean_biomass, this_mean)
   
   biomass_values <- by_clip_plot_df[biomass_type[[i]]]
+  
   weighted_squared_differences_from_mean <- weights * (biomass_values - this_mean)^2
+  
   if (sum(weights) == 0) {
     variance <- 0
   } else {
     variance <- (sum(weighted_squared_differences_from_mean)) / sum(weights)    
   }
+  
   standard_dev <- sqrt(variance)
+  
+  ## append the standard deviation to the list of standard deviations
   weighted_standard_deviation <- c(weighted_standard_deviation, standard_dev)
   
 }
