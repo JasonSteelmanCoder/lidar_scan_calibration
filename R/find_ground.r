@@ -21,14 +21,59 @@ for (i in 1) {
   cropped.las <- clip_circle(new.las, 0, 0, 10)
   plot(cropped.las, color = "Classification")
   
-  #norm.las <- normalize_height(cropped.las, tin())
+  norm.las <- normalize_height(cropped.las, tin())
   #plot(norm.las, color = "Classification")
   
-  # plot only the ground
+  ## fastPointMetrics quickly gathers a number of attributes about a point cloud
+  ## we are interested in verticality and eigentropy to find tree stems
+  ## this is modeled after part of the intelimon code
+  all_metrics <- fastPointMetrics.available()     # examine all of the available metrics
+  my_metrics <- all_metrics[c(16, 11)]            # choose Verticality and Eigentropy
+  stems.las <- fastPointMetrics(norm.las, ptm.knn(25), my_metrics)
+  
+  ## find areas with trees
+  filtered.las <- filter_poi(stems.las, Verticality > 80, Verticality < 95)
+  filtered.las <- filter_poi(filtered.las, Eigentropy < 0.03)
+  map.las <- treeMap(filtered.las, map.hough(min_h = 2, max_h = 4, min_votes = 1), merge = 0)
+  
+  ## clean up memory
+  rm(stems.las)
+  gc()
+  
+  ## label tree and stem points
+  ## the else clause is for when there are no trees in the las
+  if (object.size(map.las) > 20000L) {
+    
+    norm.las <- treePoints(norm.las, map.las, trp.crop())
+    norm.las <- stemPoints(norm.las, stm.hough(
+      h_step = 0.2,
+      h_base = c(0.05, 2.05),
+      min_votes = 1
+    ))
+    
+  } else {
+    
+    norm.las <- add_lasattribute(norm.las, x, "Stem", "tree stem point")
+  
+  }
+  
+  ## clean up
+  rm(map.las)
+  gc()
+  
+  ## set classification to 20 for points that are part of tree stems
+  norm.las@data[Stem == T, Classification := 20]
+  
+  ## remove points classified as stems
+  nonstem.las <- filter_poi(norm.las, Classification != 20)
+  plot(nonstem.las)
+  
+  ## uncomment to plot only the ground
   # change == to != to plot everything but ground
   #only.ground.las <- filter_poi(cropped.las, Classification != 2)
   #plot(only.ground.las, color = 'Z', legend = TRUE)
 
+  ## uncomment to save to file
   #writeLAS(norm.las, outputs.list[[i]])
   
 }
