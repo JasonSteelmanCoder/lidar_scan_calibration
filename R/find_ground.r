@@ -69,11 +69,6 @@ for (i in 1) {
   nonstem.las <- filter_poi(nonstem.las, Z < 3)
   nonstem.las <- filter_poi(nonstem.las, Z >= 0)
   plot(nonstem.las, legend = TRUE)
-  
-  ## uncomment to plot only the ground
-  # change == to != to plot everything but ground
-  #only.ground.las <- filter_poi(cropped.las, Classification != 2)
-  #plot(only.ground.las, color = 'Z', legend = TRUE)
 
   ## uncomment to save to file
   #writeLAS(norm.las, outputs.list[[i]])
