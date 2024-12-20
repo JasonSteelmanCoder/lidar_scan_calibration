@@ -66,7 +66,9 @@ for (i in 1) {
   
   ## remove points classified as stems
   nonstem.las <- filter_poi(norm.las, Classification != 20)
-  plot(nonstem.las)
+  nonstem.las <- filter_poi(nonstem.las, Z < 3)
+  nonstem.las <- filter_poi(nonstem.las, Z >= 0)
+  plot(nonstem.las, legend = TRUE)
   
   ## uncomment to plot only the ground
   # change == to != to plot everything but ground
