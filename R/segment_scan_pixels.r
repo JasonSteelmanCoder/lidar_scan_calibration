@@ -18,17 +18,15 @@ output.folders <- c(output.folder1, output.folder2, output.folder3)
 #print(pixel.dimensions)
 
 for (i in 1:3) {
-  m <- 1        # m tracks the number of the pixel being saved to file
   
   las <- readLAS(las.list[[i]])
   
   for (k in 1:length(pixel.dimensions)) {
     
-    pixel.las <- clip_rectangle(las, pixel.dimensions[[k]][3], pixel.dimensions[[k]][4], pixel.dimensions[[k]][1], pixel.dimensions[[k]][2])
+    pixel.las <- clip_rectangle(las, pixel.dimensions[[k]][["right_top_left_bottom"]][3], pixel.dimensions[[k]][["right_top_left_bottom"]][4], pixel.dimensions[[k]][["right_top_left_bottom"]][1], pixel.dimensions[[k]][["right_top_left_bottom"]][2])
     
-    writeLAS(pixel.las, file.path(output.folders[[i]], paste('pixel', m, '.las', sep = '')))
+    writeLAS(pixel.las, file.path(output.folders[[i]], paste('pixel_', k, '.las', sep = '')))
     
-    m <- m + 1
   }  
 }
 

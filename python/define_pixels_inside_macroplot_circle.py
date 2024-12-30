@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import json
-import ast
 
 output_location = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/pixel_dimensions.json'
 radius = 10
@@ -135,5 +134,5 @@ for i in range(len(pixels)):
 
 
 ## uncomment to save to file
-with open(output_location, 'w') as output_file:
-    json.dump(dimensions, output_file)
+# with open(output_location, 'w') as output_file:
+#     json.dump(dimensions, output_file)
