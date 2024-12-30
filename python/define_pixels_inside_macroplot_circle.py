@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import json
+import ast
 
 output_location = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/pixel_dimensions.json'
 radius = 10
@@ -107,7 +108,7 @@ for corner in quad4_corners[1:]:
     )
     pixels.append(pixel)
 
-dimensions = []
+dimensions = {}
 
 for i in range(len(pixels)):
     x1 = pixels[i][0][0]        # right
@@ -115,19 +116,24 @@ for i in range(len(pixels)):
     x2 = pixels[i][2][0]        # left
     y2 = pixels[i][2][1]        # bottom
     dimension = [x1, y1, x2, y2]
-    dimensions.append(dimension)
-    print(dimension)
+    centerpoint = [x2 + (0.5 * pixel_width), y2 + (0.5 * pixel_width)]      # the center point is: the left edge plus half of a pixel, the bottom edge plus half of a pixel
+    dimensions[str(i)] = {"right_top_left_bottom": dimension, "centerpoint": centerpoint}
 
-# with open(output_location, 'w') as output_file:
-#     json.dump(dimensions, output_file)
+# print(dimensions)
 
 
-# print(len(pixels))
+## uncomment to see a visualization of the pixels and their centers
+# for value in dimensions.values():
+#     pixel = value["right_top_left_bottom"]
+#     xs = [pixel[2], pixel[0], pixel[0], pixel[2], pixel[2]]
+#     ys = [pixel[3], pixel[3], pixel[1], pixel[1], pixel[3]]
+#     plt.plot(xs, ys)
+#     center = value["centerpoint"]
+#     plt.scatter(center[0], center[1])
+# plt.axis('equal')
+# plt.show()
 
-for pixel in pixels:
-    xs = [pixel[0][0], pixel[1][0], pixel[2][0], pixel[3][0], pixel[0][0]]
-    ys = [pixel[0][1], pixel[1][1], pixel[2][1], pixel[3][1], pixel[0][1]]
-    plt.plot(xs, ys)
-plt.axis('equal')
-plt.show()
 
+## uncomment to save to file
+with open(output_location, 'w') as output_file:
+    json.dump(dimensions, output_file)
