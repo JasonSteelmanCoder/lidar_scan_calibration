@@ -116,7 +116,7 @@ for i in range(len(pixels)):
     y2 = pixels[i][2][1]        # bottom
     dimension = [x1, y1, x2, y2]
     centerpoint = [x2 + (0.5 * pixel_width), y2 + (0.5 * pixel_width)]      # the center point is: the left edge plus half of a pixel, the bottom edge plus half of a pixel
-    dimensions[str(i)] = {"right_top_left_bottom": dimension, "centerpoint": centerpoint}
+    dimensions[str(i + 1)] = {"right_top_left_bottom": dimension, "centerpoint": centerpoint}
 
 # print(dimensions)
 
