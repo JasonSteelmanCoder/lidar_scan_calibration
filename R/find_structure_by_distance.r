@@ -13,6 +13,9 @@ require(stringr)
 ## that width is set in segment_scan_pixels.r
 voxel_width <- 1.0
 
+## USER: put the path to your output file here
+output.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/structural_variance_with_distance.csv"
+
 ## USER: put the paths to the folders of .las files here
 source.folder1 <- "C:/Users/js81535/Desktop/lidar_scan_calibration/segmented_las1/"
 source.folder2 <- "C:/Users/js81535/Desktop/lidar_scan_calibration/segmented_las2/"
@@ -23,6 +26,19 @@ distance.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/pixel_dimensio
 
 ## read in the distances
 distances <- fromJSON(file = distance.path)
+
+## initialize an empty data frame to be populated later
+output <- data.frame(
+  macroplot = numeric(),
+  voxel_number = numeric(),
+  distance = numeric(),
+  mean_height = numeric(),
+  pct_points_stratum2 = numeric(),
+  point_density_stratum2 = numeric()
+)
+
+## set a number to keep track of macroplot
+i <- 1
 
 ## loop through the three input folders
 for (folder in c(source.folder1, source.folder2, source.folder3)) {
@@ -62,18 +78,38 @@ for (folder in c(source.folder1, source.folder2, source.folder3)) {
     ## calculate the point density in stratum2 (see the introductory doc strings for more details)
     stratum2_point_density <- stratum2_count / (voxel_width^2 * 0.5)
     
-    ## print the results
-    print("")
-    print(paste("voxel number:", voxel.number))
-    print(paste("distance from plot center:", this.distance, "m"))
-    print(paste("mean height:", mean_height, "m"))
-    print(paste("percent of points in stratum2:", pct_points_stratum2, "%"))
-    print(paste("point density in stratum2:", stratum2_point_density, "points/m^3"))
+    ## uncomment to print the results
+    # print("")
+    # print(paste("voxel number:", voxel.number))
+    # print(paste("distance from plot center:", this.distance, "m"))
+    # print(paste("mean height:", mean_height, "m"))
+    # print(paste("percent of points in stratum2:", pct_points_stratum2, "%"))
+    # print(paste("point density in stratum2:", stratum2_point_density, "points/m^3"))
+    
+    ## assemble a new row with the calculated values
+    new_row <- data.frame(
+      macroplot = i,
+      voxel_number = voxel.number,
+      distance = this.distance,
+      mean_height = mean_height,
+      pct_points_stratum2 = pct_points_stratum2,
+      point_density_stratum2 = stratum2_point_density
+    )
+
+    ## append the new row to the output data frame
+    output <- rbind(output, new_row)
     
   }
+    
+  ## increment the macroplot index
+  i <- i + 1
 
 }
 
-##TODO: 
-# save results to file
+## uncomment to print the output table
+#print(output)
+
+## uncomment to save the results to file
+#write.csv(output, output.path, row.names = FALSE)
+
 
