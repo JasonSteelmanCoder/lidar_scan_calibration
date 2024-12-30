@@ -15,8 +15,21 @@ voxel_width <- 1.0
 ## USER: put the path to the .las file here
 input.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/segmented_las1/pixel_1.las"
 
-## read in the file
+## USER: the .json file contains the distances to each segmented voxel. Put the path to it here
+distance.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/pixel_dimensions.json"
+
+## read in the distances
+distances <- fromJSON(file = "C:/Users/js81535/Desktop/lidar_scan_calibration/pixel_dimensions.json")
+
+## read in the .las file
 input.las <- readLAS(input.path)
+
+## find the distance of the segmented voxel from the center of the macroplot
+## distance is measured from the center of the segmented voxel
+this.coords <- distances[[1]][["centerpoint"]]
+this.x <- this.coords[[1]]
+this.y <- this.coords[[2]]
+this.distance <- sqrt(this.x^2 + this.y^2)
 
 ## calculate mean height
 mean_height <- mean(input.las$Z)
@@ -35,9 +48,13 @@ pct_points_stratum2 <- stratum2_count / point_count * 100
 stratum2_point_density <- stratum2_count / (voxel_width^2 * 0.5)
 
 ## print the results
+print(paste("distance from plot center:", this.distance, "m"))
 print(paste("mean height:", mean_height))
 print(paste("percent of points in stratum2:", pct_points_stratum2))
 print(paste("point density in stratum2:", stratum2_point_density, "points/m^3"))
 
 
+##TODO: 
+# loop through all scans
+# save results to file
 
