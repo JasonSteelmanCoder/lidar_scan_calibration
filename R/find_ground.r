@@ -71,10 +71,10 @@ for (i in 1:3) {
   ## crop points that are too high or too low
   nonstem.las <- filter_poi(nonstem.las, Z < 3)
   nonstem.las <- filter_poi(nonstem.las, Z >= 0)
-  plot(nonstem.las, legend = TRUE)
-
+  #plot(nonstem.las, legend = TRUE)
+  
   ## uncomment to save to file
-  #writeLAS(norm.las, outputs.list[[i]])
+  writeLAS(nonstem.las, outputs.list[[i]])
   
 }
 
