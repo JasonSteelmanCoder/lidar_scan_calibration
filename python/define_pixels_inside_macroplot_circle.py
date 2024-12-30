@@ -110,10 +110,10 @@ for corner in quad4_corners[1:]:
 dimensions = []
 
 for i in range(len(pixels)):
-    x1 = pixels[i][0][0]
-    y1 = pixels[i][0][1]
-    x2 = pixels[i][2][0]
-    y2 = pixels[i][2][1]
+    x1 = pixels[i][0][0]        # right
+    y1 = pixels[i][0][1]        # top
+    x2 = pixels[i][2][0]        # left
+    y2 = pixels[i][2][1]        # bottom
     dimension = [x1, y1, x2, y2]
     dimensions.append(dimension)
     print(dimension)
