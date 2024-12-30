@@ -74,7 +74,7 @@ for (i in 1:3) {
   #plot(nonstem.las, legend = TRUE)
   
   ## uncomment to save to file
-  writeLAS(nonstem.las, outputs.list[[i]])
+  #writeLAS(nonstem.las, outputs.list[[i]])
   
 }
 
