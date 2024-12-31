@@ -15,6 +15,19 @@ mean_heights = input_data["mean_height"]
 pct_points_stratum2 = input_data["pct_points_stratum2"]
 point_density_stratum2 = input_data["point_density_stratum2"]
 
+def power_law(x, a, b):
+    return a * x**(-b)
+
+params, covariance = curve_fit(power_law, distances, point_density_stratum2)
+a_fit, b_fit = params
+x_fit = np.linspace(min(distances), max(distances), 100)
+y_fit = power_law(x_fit, a_fit, b_fit)
+
+plt.scatter(distances, point_density_stratum2)
+plt.plot(x_fit, y_fit, color="black")
+plt.show()
+plt.clf()
+
 degree_of_mean_height = 2
 coefficients_of_mean_height = np.polyfit(distances, mean_heights, degree_of_mean_height)
 polynomial_of_mean_height = np.poly1d(coefficients_of_mean_height)
@@ -36,15 +49,3 @@ plt.scatter(distances, pct_points_stratum2)
 plt.plot(x_fit_of_pct_s2, y_fit_of_pct_s2, color="black")
 plt.show()
 plt.clf()
-
-def power_law(x, a, b):
-    return a * x**(-b)
-
-params, covariance = curve_fit(power_law, distances, point_density_stratum2)
-a_fit, b_fit = params
-x_fit = np.linspace(min(distances), max(distances), 100)
-y_fit = power_law(x_fit, a_fit, b_fit)
-
-plt.scatter(distances, point_density_stratum2)
-plt.plot(x_fit, y_fit, color="black")
-plt.show()
