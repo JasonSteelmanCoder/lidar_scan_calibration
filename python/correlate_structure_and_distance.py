@@ -18,17 +18,16 @@ point_density_stratum2 = input_data["point_density_stratum2"]
 ## find some aggregate values
 agg_data = input_data.groupby("distance", as_index=False).agg({
     "distance": 'max',           # this is just a list of the unique distances
-    "mean_height": 'count',      # this is just a count of the number of voxels for each distance
     "point_density_stratum2": 'std',     # this is the local standard deviation for each distance from plot center
-    "pct_points_stratum2": 'std'        # this is the local standard deviation for each distance from plot center
+    "pct_points_stratum2": 'std',        # this is the local standard deviation for each distance from plot center
+    "mean_height": lambda x: np.percentile(x, 75) - np.percentile(x, 25),      # this is the local IQR. IQR is used here, instead of standard dev, to account for outliers in the mean height values
 })
 agg_data = agg_data.rename(columns={        # rename columns to avoid confusion
     "distance": "unique_distance",
-    "mean_height": "num_voxels",
     "point_density_stratum2": "local_standard_deviation_for_density",
-    "pct_points_stratum2": "local_standard_deviation_for_pct_points"
+    "pct_points_stratum2": "local_standard_deviation_for_pct_points",
+    "mean_height": "local_iqr_for_mean_height"
 })
-counts = agg_data["num_voxels"]
 
 ## Point Density in Stratum 2
 
@@ -64,6 +63,7 @@ plt.scatter(distances, input_data["point_density_straightened"])
 plt.plot(x_fit, [0] * 31)
 # plt.show()
 plt.clf()
+
 ## plot the standardized data
 plt.scatter(distances, input_data["point_density_straightened"] / input_data["local_standard_deviation_for_density"])
 plt.plot(x_fit, [0] * 31)
@@ -78,7 +78,7 @@ plt.clf()
 degree_of_pct_s2 = 2
 coefficients_of_pct_s2 = np.polyfit(distances, pct_points_stratum2, degree_of_pct_s2)
 polynomial_of_pct_s2 = np.poly1d(coefficients_of_pct_s2)
-x_fit_of_pct_s2 = np.linspace(min(distances), max(distances), 100)
+x_fit_of_pct_s2 = np.linspace(min(distances), max(distances), 31)
 y_fit_of_pct_s2 = polynomial_of_pct_s2(x_fit_of_pct_s2)
 print()
 print(f"pct s2 polynomial degree and formula: {polynomial_of_pct_s2}")
@@ -100,38 +100,53 @@ input_data = input_data.merge(agg_data[["unique_distance", "local_standard_devia
 
 ## plot the flattened data
 plt.scatter(distances, input_data["pct_points_straightened"])
-plt.plot(x_fit, [0] * 31)
+plt.plot(x_fit_of_pct_s2, [0] * 31)
 # plt.show()
 plt.clf()
+
 ## plot the standardized data
 plt.scatter(distances, input_data["pct_points_straightened"] / input_data["local_standard_deviation_for_pct_points"])
-plt.plot(x_fit, [0] * 31)
-plt.show()
+plt.plot(x_fit_of_pct_s2, [0] * 31)
+# plt.show()
 plt.clf()
+
+
 
 ## Mean Height
 
 ## fit a trend line
-# degree_of_mean_height = 2
-# coefficients_of_mean_height = np.polyfit(distances, mean_heights, degree_of_mean_height)
-# polynomial_of_mean_height = np.poly1d(coefficients_of_mean_height)
-# x_fit_of_mean_height = np.linspace(min(distances), max(distances), 100)
-# y_fit_of_mean_height = polynomial_of_mean_height(x_fit_of_mean_height)
-# print()
-# print(f"mean height polynomial degree and formula: {polynomial_of_mean_height}")
-# print()
+degree_of_mean_height = 2
+coefficients_of_mean_height = np.polyfit(distances, mean_heights, degree_of_mean_height)
+polynomial_of_mean_height = np.poly1d(coefficients_of_mean_height)
+x_fit_of_mean_height = np.linspace(min(distances), max(distances), 100)
+y_fit_of_mean_height = polynomial_of_mean_height(x_fit_of_mean_height)
+print()
+print(f"mean height polynomial degree and formula: {polynomial_of_mean_height}")
+print()
 
 ## visualize the data and the trend line
-# plt.scatter(distances, mean_heights)
-# plt.plot(x_fit_of_mean_height, y_fit_of_mean_height, color="black")
-# plt.title("Mean Height of Points (0-3m)")
-# plt.xlabel("Distance from Macroplot Center to Voxel Center (m)")
-# plt.ylabel("Mean Height of Points in the Voxel")
+plt.scatter(distances, mean_heights)
+plt.plot(x_fit_of_mean_height, y_fit_of_mean_height, color="black")
+plt.title("Mean Height of Points (0-3m)")
+plt.xlabel("Distance from Macroplot Center to Voxel Center (m)")
+plt.ylabel("Mean Height of Points in the Voxel")
 # plt.show()            # plots the mean_height data and trend line, so you can see the effect of distance from the scanner
-# plt.clf()
+plt.clf()
 
 ## standardize the mean_height data with respect to distance
 ## make it flat
+input_data["mean_height_straightened"] = input_data["mean_height"] - polynomial_of_mean_height(input_data["distance"])
 ## make it homoscedastic
+input_data = input_data.merge(agg_data[["unique_distance", "local_iqr_for_mean_height"]], how="inner", left_on="distance", right_on="unique_distance")
+
 ## plot the flattened data
+plt.scatter(distances, input_data["mean_height_straightened"])
+plt.plot(x_fit_of_pct_s2, [0] * 31)
+# plt.show()
+plt.clf()
+
 ## plot the standardized data
+plt.scatter(distances, input_data["mean_height_straightened"] / input_data["local_iqr_for_mean_height"])
+plt.plot(x_fit_of_pct_s2, [0] * 31)
+# plt.show()
+plt.clf()
