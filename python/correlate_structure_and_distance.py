@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
 
+## grab the data and prepare variables
 data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/csv_data/structural_variance_with_distance.csv"
 
 input_data = pd.read_csv(data_path)
@@ -14,6 +15,7 @@ mean_heights = input_data["mean_height"]
 pct_points_stratum2 = input_data["pct_points_stratum2"]
 point_density_stratum2 = input_data["point_density_stratum2"]
 
+## find some aggregate values
 agg_data = input_data.groupby("distance", as_index=False).agg({
     "distance": 'max',           # this is just a list of the unique distances
     "mean_height": 'count',      # this is just a count of the number of voxels for each distance
@@ -27,12 +29,13 @@ agg_data = agg_data.rename(columns={        # rename columns to avoid confusion
 counts = agg_data["num_voxels"]
 local_standard_deviations_for_density = agg_data["local_standard_deviation_for_density"]
 
-## work with point density in stratum 2
+## Point Density in Stratum 2
+
 ## define power law decay for the trend line
 def power_law(x, a, b):
     return a * x**(-b)
 
-## calculate the trend line
+## fit a trend line
 params, covariance = curve_fit(power_law, distances, point_density_stratum2)
 a_fit, b_fit = params
 x_fit = np.linspace(min(distances), max(distances), 31)
@@ -46,15 +49,20 @@ plt.plot(x_fit, y_fit, color="black")
 plt.title("Point Density in Stratum 2 (50-100cm)")
 plt.xlabel("Distance from Macroplot Center to Voxel Center (m)")
 plt.ylabel("Points Per m^3 In Stratum 2")
-# plt.show()
+plt.show()                      # plots the density data and trend line, so you can see the effect of distance from the scanner
 plt.clf()
 
-## normalize
+## standardize the density data with respect to distance
+## make it flat
 input_data["point_density_straightened"] = input_data["point_density_stratum2"] - power_law(input_data["distance"], a_fit, b_fit)
+## make it homoscedastic
 input_data = input_data.merge(agg_data[["unique_distance", "local_standard_deviation_for_density"]], how="inner", left_on="distance", right_on="unique_distance")
-# input_data["point_density_normalized"] = input_data["point_density_straightened"]...
-print(input_data)
-# plt.scatter(distances, input_data["point_density_straightened"])
+
+## plot the flattened data
+plt.scatter(distances, input_data["point_density_straightened"])
+plt.plot(x_fit, [0] * 31)
+plt.show()
+## plot the standardized data
 plt.scatter(distances, input_data["point_density_straightened"] / input_data["local_standard_deviation_for_density"])
 plt.plot(x_fit, [0] * 31)
 plt.show()
