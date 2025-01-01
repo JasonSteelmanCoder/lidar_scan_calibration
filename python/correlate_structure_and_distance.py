@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
 
+## USER: put your output location here
+output_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/csv_data/standardized_structural_variables.csv"
+
 ## grab the data and prepare variables
 data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/csv_data/structural_variance_with_distance.csv"
 
@@ -14,6 +17,11 @@ distances = input_data["distance"]
 mean_heights = input_data["mean_height"]
 pct_points_stratum2 = input_data["pct_points_stratum2"]
 point_density_stratum2 = input_data["point_density_stratum2"]
+
+output_df = pd.DataFrame({
+    "macroplot": macroplots,
+    "distance": distances
+})
 
 ## find some aggregate values
 agg_data = input_data.groupby("distance", as_index=False).agg({
@@ -58,6 +66,9 @@ input_data["point_density_straightened"] = input_data["point_density_stratum2"] 
 ## make it homoscedastic
 input_data = input_data.merge(agg_data[["unique_distance", "local_standard_deviation_for_density"]], how="inner", left_on="distance", right_on="unique_distance")
 
+## add standardized data to the output
+output_df["standardized_point_density_in_stratum2"] = input_data["point_density_straightened"] / input_data["local_standard_deviation_for_density"]
+
 ## plot the flattened data
 plt.scatter(distances, input_data["point_density_straightened"])
 plt.plot(x_fit, [0] * 31)
@@ -97,6 +108,9 @@ plt.clf()
 input_data["pct_points_straightened"] = input_data["pct_points_stratum2"] - polynomial_of_pct_s2(input_data["distance"])
 ## make it homoscedastic
 input_data = input_data.merge(agg_data[["unique_distance", "local_standard_deviation_for_pct_points"]], how="inner", left_on="distance", right_on="unique_distance")
+
+## add standardized data to the output
+output_df["standardized_pct_points_in_stratum2"] = input_data["pct_points_straightened"] / input_data["local_standard_deviation_for_pct_points"]
 
 ## plot the flattened data
 plt.scatter(distances, input_data["pct_points_straightened"])
@@ -139,6 +153,9 @@ input_data["mean_height_straightened"] = input_data["mean_height"] - polynomial_
 ## make it homoscedastic
 input_data = input_data.merge(agg_data[["unique_distance", "local_iqr_for_mean_height"]], how="inner", left_on="distance", right_on="unique_distance")
 
+## add standardized data to the output
+output_df["standardized_mean_height"] = input_data["mean_height_straightened"] / input_data["local_iqr_for_mean_height"]
+
 ## plot the flattened data
 plt.scatter(distances, input_data["mean_height_straightened"])
 plt.plot(x_fit_of_pct_s2, [0] * 31)
@@ -150,3 +167,9 @@ plt.scatter(distances, input_data["mean_height_straightened"] / input_data["loca
 plt.plot(x_fit_of_pct_s2, [0] * 31)
 # plt.show()
 plt.clf()
+
+## view the output
+print(output_df)
+
+## uncomment to save the output to file
+output_df.to_csv(output_path, index=False)
