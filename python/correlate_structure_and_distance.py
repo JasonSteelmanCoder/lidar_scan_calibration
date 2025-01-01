@@ -19,15 +19,16 @@ point_density_stratum2 = input_data["point_density_stratum2"]
 agg_data = input_data.groupby("distance", as_index=False).agg({
     "distance": 'max',           # this is just a list of the unique distances
     "mean_height": 'count',      # this is just a count of the number of voxels for each distance
-    "point_density_stratum2": 'std'     # this is the local standard deviation for each distance from plot center
+    "point_density_stratum2": 'std',     # this is the local standard deviation for each distance from plot center
+    "pct_points_stratum2": 'std'        # this is the local standard deviation for each distance from plot center
 })
 agg_data = agg_data.rename(columns={        # rename columns to avoid confusion
     "distance": "unique_distance",
     "mean_height": "num_voxels",
-    "point_density_stratum2": "local_standard_deviation_for_density"
+    "point_density_stratum2": "local_standard_deviation_for_density",
+    "pct_points_stratum2": "local_standard_deviation_for_pct_points"
 })
 counts = agg_data["num_voxels"]
-local_standard_deviations_for_density = agg_data["local_standard_deviation_for_density"]
 
 ## Point Density in Stratum 2
 
@@ -49,7 +50,7 @@ plt.plot(x_fit, y_fit, color="black")
 plt.title("Point Density in Stratum 2 (50-100cm)")
 plt.xlabel("Distance from Macroplot Center to Voxel Center (m)")
 plt.ylabel("Points Per m^3 In Stratum 2")
-plt.show()                      # plots the density data and trend line, so you can see the effect of distance from the scanner
+# plt.show()                      # plots the density data and trend line, so you can see the effect of distance from the scanner
 plt.clf()
 
 ## standardize the density data with respect to distance
@@ -61,33 +62,56 @@ input_data = input_data.merge(agg_data[["unique_distance", "local_standard_devia
 ## plot the flattened data
 plt.scatter(distances, input_data["point_density_straightened"])
 plt.plot(x_fit, [0] * 31)
-plt.show()
+# plt.show()
+plt.clf()
 ## plot the standardized data
 plt.scatter(distances, input_data["point_density_straightened"] / input_data["local_standard_deviation_for_density"])
 plt.plot(x_fit, [0] * 31)
-plt.show()
-
-
-
-## work with percent of points in stratum 2
-# degree_of_pct_s2 = 2
-# coefficients_of_pct_s2 = np.polyfit(distances, pct_points_stratum2, degree_of_pct_s2)
-# polynomial_of_pct_s2 = np.poly1d(coefficients_of_pct_s2)
-# x_fit_of_pct_s2 = np.linspace(min(distances), max(distances), 100)
-# y_fit_of_pct_s2 = polynomial_of_pct_s2(x_fit_of_pct_s2)
-# print()
-# print(f"pct s2 polynomial degree and formula: {polynomial_of_pct_s2}")
-
-# plt.scatter(distances, pct_points_stratum2)
-# plt.title("Percent of Points in Stratum 2 (50-100cm)")
-# plt.xlabel("Distance from Macroplot Center to Voxel Center (m)")
-# plt.ylabel("Percent of Voxel's Points in Stratum 2")
-# plt.plot(x_fit_of_pct_s2, y_fit_of_pct_s2, color="black")
 # plt.show()
+plt.clf()
 
 
 
-## work with mean_height
+## Percent of Points in Stratum 2
+
+## fit a trend line
+degree_of_pct_s2 = 2
+coefficients_of_pct_s2 = np.polyfit(distances, pct_points_stratum2, degree_of_pct_s2)
+polynomial_of_pct_s2 = np.poly1d(coefficients_of_pct_s2)
+x_fit_of_pct_s2 = np.linspace(min(distances), max(distances), 100)
+y_fit_of_pct_s2 = polynomial_of_pct_s2(x_fit_of_pct_s2)
+print()
+print(f"pct s2 polynomial degree and formula: {polynomial_of_pct_s2}")
+
+## visualize the data and the trend line
+plt.scatter(distances, pct_points_stratum2)
+plt.title("Percent of Points in Stratum 2 (50-100cm)")
+plt.xlabel("Distance from Macroplot Center to Voxel Center (m)")
+plt.ylabel("Percent of Voxel's Points in Stratum 2")
+plt.plot(x_fit_of_pct_s2, y_fit_of_pct_s2, color="black")
+# plt.show()          # plots the percent points data and trend line, so you can see the effect of distance from the scanner
+plt.clf()
+
+## standardize the pct points data with respect to distance
+## make it flat
+input_data["pct_points_straightened"] = input_data["pct_points_stratum2"] - polynomial_of_pct_s2(input_data["distance"])
+## make it homoscedastic
+input_data = input_data.merge(agg_data[["unique_distance", "local_standard_deviation_for_pct_points"]], how="inner", left_on="distance", right_on="unique_distance")
+
+## plot the flattened data
+plt.scatter(distances, input_data["pct_points_straightened"])
+plt.plot(x_fit, [0] * 31)
+# plt.show()
+plt.clf()
+## plot the standardized data
+plt.scatter(distances, input_data["pct_points_straightened"] / input_data["local_standard_deviation_for_pct_points"])
+plt.plot(x_fit, [0] * 31)
+plt.show()
+plt.clf()
+
+## Mean Height
+
+## fit a trend line
 # degree_of_mean_height = 2
 # coefficients_of_mean_height = np.polyfit(distances, mean_heights, degree_of_mean_height)
 # polynomial_of_mean_height = np.poly1d(coefficients_of_mean_height)
@@ -97,10 +121,17 @@ plt.show()
 # print(f"mean height polynomial degree and formula: {polynomial_of_mean_height}")
 # print()
 
+## visualize the data and the trend line
 # plt.scatter(distances, mean_heights)
 # plt.plot(x_fit_of_mean_height, y_fit_of_mean_height, color="black")
 # plt.title("Mean Height of Points (0-3m)")
 # plt.xlabel("Distance from Macroplot Center to Voxel Center (m)")
 # plt.ylabel("Mean Height of Points in the Voxel")
-# plt.show()
+# plt.show()            # plots the mean_height data and trend line, so you can see the effect of distance from the scanner
 # plt.clf()
+
+## standardize the mean_height data with respect to distance
+## make it flat
+## make it homoscedastic
+## plot the flattened data
+## plot the standardized data
