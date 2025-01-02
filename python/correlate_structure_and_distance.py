@@ -13,6 +13,7 @@ data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibratio
 input_data = pd.read_csv(data_path)
 
 macroplots = input_data["macroplot"]
+voxel_number = input_data["voxel_number"]
 distances = input_data["distance"]
 mean_heights = input_data["mean_height"]
 pct_points_stratum2 = input_data["pct_points_stratum2"]
@@ -20,6 +21,7 @@ point_density_stratum2 = input_data["point_density_stratum2"]
 
 output_df = pd.DataFrame({
     "macroplot": macroplots,
+    "voxel_number": voxel_number,
     "distance": distances
 })
 
@@ -172,4 +174,4 @@ plt.clf()
 print(output_df)
 
 ## uncomment to save the output to file
-output_df.to_csv(output_path, index=False)
+# output_df.to_csv(output_path, index=False)
