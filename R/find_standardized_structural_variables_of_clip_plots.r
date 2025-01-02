@@ -9,6 +9,20 @@ m3_clip_plots_folder <- "C:/Users/js81535/Desktop/lidar_scan_calibration/clip_pl
 ## set up variables
 voxel_width <- 0.5
 
+## set up trend-line formulas. 
+## these come from the calculations done in correlate_structure_and_distance.py
+point_density_formula <- function(x) {
+  return (66519.34091135851 * x^(-2.3800269567879138))
+}
+
+pct_s2_formula <- function(x) {
+  return(-0.1786 * x^2 + 3.051 * x + 3.656)
+}
+
+mean_height_formula <- function(x) {
+  return(-0.002356 * x^2 + 0.04076 * x + 0.07822)
+}
+
 ## loop through the three input folders
 for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folder)) {
   
@@ -46,12 +60,12 @@ for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folde
     stratum2_point_density <- stratum2_count / (voxel_width^2 * 0.5)
     
     ## uncomment to print the results
-    #print("")
+    print("")
     print(paste("clip plot:", clip.plot.name))
     print(paste("distance from plot center:", this.distance, "m"))
-    #print(paste("mean height:", mean_height, "m"))
-    #print(paste("percent of points in stratum2:", pct_points_stratum2, "%"))
-    #print(paste("point density in stratum2:", stratum2_point_density, "points/m^3"))
+    print(paste("mean height:", mean_height, "m"))
+    print(paste("percent of points in stratum2:", pct_points_stratum2, "%"))
+    print(paste("point density in stratum2:", stratum2_point_density, "points/m^3"))
      
   }
     
