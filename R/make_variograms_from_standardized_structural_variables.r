@@ -28,34 +28,45 @@ macroplot1 <- subset(structural.variables, macroplot == 1)
 macroplot2 <- subset(structural.variables, macroplot == 2)
 macroplot3 <- subset(structural.variables, macroplot == 3)
 
+## set up a list of names for the structural variables
+st_vars <- c(
+  "standardized_point_density_in_stratum2", 
+  "standardized_pct_points_in_stratum2", 
+  "standardized_mean_height"
+)
+
 ## loop through the macroplots
 for (macroplot in list(macroplot1, macroplot2, macroplot3)) {
   
-  
-  ## make spatial data frames with the data and coordinates
-  spatial_df <- SpatialPointsDataFrame(
-    
-    coords = macroplot[ , c("x", "y")],
-    data = as.data.frame(macroplot["standardized_point_density_in_stratum2"])
-    
-  )
-  
-  ## make a variogram 
-  variogram = autofitVariogram(
 
-    formula = as.formula("standardized_point_density_in_stratum2 ~ 1"), 
-    input_data = spatial_df, 
-    verbose = FALSE, 
-    miscFitOptions = list(merge.small.bins = TRUE)
+  for (var in st_vars) {
+    
+    ## make spatial data frames with the data and coordinates
+    spatial_df <- SpatialPointsDataFrame(
+      
+      coords = macroplot[ , c("x", "y")],
+      data = as.data.frame(macroplot[var])
+      
+    )
+    
+    ## make a variogram 
+    variogram = autofitVariogram(
   
-  )
+      formula = as.formula(paste(var, "~ 1")), 
+      input_data = spatial_df, 
+      verbose = FALSE, 
+      miscFitOptions = list(merge.small.bins = TRUE)
+    
+    )
+  
+    ## change the title of the variogram  
+    ## note: this will plot the variogram twice: once with a generic title and once with the desired title
+    the_plot <- plot(variogram)
+    the_plot$main = paste("Macroplot", macroplot$macroplot[[1]], var)
+    plot(the_plot)
 
-  ## change the title of the variogram  
-  ## note: this will plot the variogram twice: once with a generic title and once with the desired title
-  the_plot <- plot(variogram)
-  the_plot$main = paste("Macroplot", macroplot$macroplot[[1]], "standardized_point_density_in_stratum2")
-  plot(the_plot)
-  
+  }  
+
 }
 
 
