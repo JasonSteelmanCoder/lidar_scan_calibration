@@ -49,7 +49,9 @@ for (macroplot in list(macroplot1, macroplot2, macroplot3)) {
     miscFitOptions = list(merge.small.bins = TRUE)
   
   )
-  
+
+  ## change the title of the variogram  
+  ## note: this will plot the variogram twice: once with a generic title and once with the desired title
   the_plot <- plot(variogram)
   the_plot$main = paste("Macroplot", macroplot$macroplot[[1]], "standardized_point_density_in_stratum2")
   plot(the_plot)
