@@ -2,9 +2,9 @@ require(lidR)
 library("rjson")
 require(sf)
 
-input.las1 <- "C:/Users/js81535/Desktop/lidar_scan_calibration/HEF_0001_20231127_1.las"
-input.las2 <- "C:/Users/js81535/Desktop/lidar_scan_calibration/HEF_0002_20231127_1.las"
-input.las3 <- "C:/Users/js81535/Desktop/lidar_scan_calibration/HEF_0003_20231127_1.las"
+input.las1 <- "C:/Users/js81535/Desktop/lidar_scan_calibration/normalized_macroplots/normalized_macroplot1.las"
+input.las2 <- "C:/Users/js81535/Desktop/lidar_scan_calibration/normalized_macroplots/normalized_macroplot2.las"
+input.las3 <- "C:/Users/js81535/Desktop/lidar_scan_calibration/normalized_macroplots/normalized_macroplot3.las"
 
 coordinates.path1 <- "C:/Users/js81535/Desktop/lidar_scan_calibration/coordinates_macroplot1.json"
 coordinates.path2 <- "C:/Users/js81535/Desktop/lidar_scan_calibration/coordinates_macroplot2.json"
