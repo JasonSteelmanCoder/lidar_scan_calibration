@@ -36,22 +36,23 @@ for (macroplot in list(macroplot1, macroplot2, macroplot3)) {
   spatial_df <- SpatialPointsDataFrame(
     
     coords = macroplot[ , c("x", "y")],
-    data = as.data.frame(macroplot["standardized_mean_height"])
+    data = as.data.frame(macroplot["standardized_point_density_in_stratum2"])
     
   )
   
-  print(spatial_df)
-  
+  ## make a variogram 
   variogram = autofitVariogram(
 
-    formula = as.formula("standardized_mean_height ~ 1"), 
+    formula = as.formula("standardized_point_density_in_stratum2 ~ 1"), 
     input_data = spatial_df, 
     verbose = FALSE, 
     miscFitOptions = list(merge.small.bins = TRUE)
   
   )
   
-  plot(variogram)
+  the_plot <- plot(variogram)
+  the_plot$main = paste("Macroplot", macroplot$macroplot[[1]], "standardized_point_density_in_stratum2")
+  plot(the_plot)
   
 }
 
