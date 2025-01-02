@@ -9,6 +9,18 @@ m3_clip_plots_folder <- "C:/Users/js81535/Desktop/lidar_scan_calibration/clip_pl
 ## set up variables
 voxel_width <- 0.5
 
+## initialize empty output data frame to be populated later
+output <- data.frame(
+  clip.plot.name = character(),
+  distance = numeric(),
+  mean_height = numeric(),
+  pct_points_stratum2 = numeric(),
+  stratum2_point_density = numeric(),
+  flattened_mean_height = numeric(),
+  flattened_pct_points_stratum2 = numeric(),
+  flattened_stratum2_point_density = numeric()
+)
+
 ## set up trend-line formulas. 
 ## these come from the calculations done in correlate_structure_and_distance.py
 point_density_formula <- function(x) {
@@ -42,7 +54,10 @@ for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folde
     
     ## read in the .las file
     input.las <- readLAS(file)
+
     
+    ## find raw structural variables
+        
     ## calculate mean height
     mean_height <- mean(input.las$Z)
     
@@ -59,17 +74,45 @@ for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folde
     ## calculate the point density in stratum2 (see the introductory doc strings for more details)
     stratum2_point_density <- stratum2_count / (voxel_width^2 * 0.5)
     
+    
+    ## find flattened structural variables
+
+    flattened_mean_height <- mean_height - mean_height_formula(this.distance)
+    flattened_pct_points_stratum2 <-  pct_points_stratum2 - pct_s2_formula(this.distance)
+    flattened_stratum2_point_density <- stratum2_point_density - point_density_formula(this.distance)
+    
     ## uncomment to print the results
-    print("")
-    print(paste("clip plot:", clip.plot.name))
-    print(paste("distance from plot center:", this.distance, "m"))
-    print(paste("mean height:", mean_height, "m"))
-    print(paste("percent of points in stratum2:", pct_points_stratum2, "%"))
-    print(paste("point density in stratum2:", stratum2_point_density, "points/m^3"))
-     
+    #print("")
+    #print(paste("clip plot:", clip.plot.name))
+    #print(paste("distance from plot center:", this.distance, "m"))
+    
+    #print(paste("mean height:", mean_height, "m"))
+    #print(paste("percent of points in stratum2:", pct_points_stratum2, "%"))
+    #print(paste("point density in stratum2:", stratum2_point_density, "points/m^3"))
+
+    #print(paste("flattened mean height:", flattened_mean_height))
+    #print(paste("flattened percent of points in stratum2:", flattened_pct_points_stratum2))
+    #print(paste("flattened point density in stratum2:", flattened_stratum2_point_density))
+    
+    ## create a new row with the values from the clip plot
+    new_row <- data.frame(
+      clip.plot.name = clip.plot.name,
+      distance = this.distance,
+      mean_height = mean_height,
+      pct_points_stratum2 = pct_points_stratum2,
+      stratum2_point_density = stratum2_point_density,
+      flattened_mean_height = flattened_mean_height,
+      flattened_pct_points_stratum2 = flattened_pct_points_stratum2,
+      flattened_stratum2_point_density = flattened_stratum2_point_density
+    )
+    ## add the new row to the output data frame
+    output <- rbind(output, new_row)
+    
   }
     
 }
 
-
+#print(output)
+plot(output$distance, output$mean_height)
+plot(output$distance, output$flattened_mean_height)
 
