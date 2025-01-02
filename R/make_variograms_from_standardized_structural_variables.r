@@ -38,7 +38,7 @@ st_vars <- c(
 ## loop through the macroplots
 for (macroplot in list(macroplot1, macroplot2, macroplot3)) {
   
-
+  ## loop through the structural variables
   for (var in st_vars) {
     
     ## make spatial data frames with the data and coordinates
