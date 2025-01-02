@@ -39,6 +39,12 @@ agg_data = agg_data.rename(columns={        # rename columns to avoid confusion
     "mean_height": "local_iqr_for_mean_height"
 })
 
+## uncomment to save agg_data to csv 
+# print(agg_data)
+# agg_data.to_csv(f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/csv_data/local_measurements_of_spread_for_structural_variables.csv")
+
+
+
 ## Point Density in Stratum 2
 
 ## define power law decay for the trend line
