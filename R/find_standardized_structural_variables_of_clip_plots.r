@@ -1,10 +1,14 @@
 require(lidR)
 require(stringr)
+require(ggplot2)
 
 ## grab data
 m1_clip_plots_folder <- "C:/Users/js81535/Desktop/lidar_scan_calibration/clip_plot_las1"
 m2_clip_plots_folder <- "C:/Users/js81535/Desktop/lidar_scan_calibration/clip_plot_las2"
 m3_clip_plots_folder <- "C:/Users/js81535/Desktop/lidar_scan_calibration/clip_plot_las3"
+
+spreads.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/local_measurements_of_spread_for_structural_variables.csv"
+spreads <- read.csv(spreads.path)
 
 ## set up variables
 voxel_width <- 0.5
@@ -20,6 +24,18 @@ output <- data.frame(
   flattened_pct_points_stratum2 = numeric(),
   flattened_stratum2_point_density = numeric()
 )
+
+## uncomment to view measures of spread at different distances
+#print(spreads)
+#ggplot(data = spreads, aes(spreads$unique_distance, spreads$local_iqr_for_mean_height)) + 
+#  geom_point() +
+#  geom_smooth()
+#ggplot(data = spreads, aes(spreads$unique_distance, spreads$local_standard_deviation_for_density)) +
+#  geom_point() + 
+#  geom_smooth()
+#ggplot(data = spreads, aes(spreads$unique_distance, spreads$local_standard_deviation_for_pct_points)) + 
+#  geom_point() +
+#  geom_smooth()
 
 ## set up trend-line formulas. 
 ## these come from the calculations done in correlate_structure_and_distance.py
