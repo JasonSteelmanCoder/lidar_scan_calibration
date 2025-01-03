@@ -146,11 +146,14 @@ for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folde
 ## uncomment to see the output
 print(output)
 
-## uncomment to see the flattening process visualized
+## uncomment to see the standardization process visualized
 #plot(output$distance, output$mean_height)
 #plot(output$distance, output$flattened_mean_height)
+#plot(output$distance, output$standardized_mean_height)
 #plot(output$distance, output$pct_points_stratum2)
 #plot(output$distance, output$flattened_pct_points_stratum2)
+#plot(output$distance, output$standardized_pct_points_stratum2)
 #plot(output$distance, output$stratum2_point_density)
 #plot(output$distance, output$flattened_stratum2_point_density)
+#plot(output$distance, output$standardized_stratum2_point_density)
 
