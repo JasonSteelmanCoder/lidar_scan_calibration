@@ -25,18 +25,6 @@ output <- data.frame(
   flattened_stratum2_point_density = numeric()
 )
 
-## uncomment to view measures of spread at different distances
-#print(spreads)
-#ggplot(data = spreads, aes(spreads$unique_distance, spreads$local_iqr_for_mean_height)) + 
-#  geom_point() +
-#  geom_smooth()
-#ggplot(data = spreads, aes(spreads$unique_distance, spreads$local_standard_deviation_for_density)) +
-#  geom_point() + 
-#  geom_smooth()
-#ggplot(data = spreads, aes(spreads$unique_distance, spreads$local_standard_deviation_for_pct_points)) + 
-#  geom_point() +
-#  geom_smooth()
-
 ## set up trend-line formulas. 
 ## these come from the calculations done in correlate_structure_and_distance.py
 point_density_formula <- function(x) {
@@ -50,6 +38,30 @@ pct_s2_formula <- function(x) {
 mean_height_formula <- function(x) {
   return(-0.002356 * x^2 + 0.04076 * x + 0.07822)
 }
+
+## find trend lines for local measures of spread
+std_pct_points_line <- lm(as.formula(paste('local_standard_deviation_for_pct_points ~ unique_distance')), data = spreads)
+print(std_pct_points_line$coefficients)
+iqr_mean_height <- lm(as.formula('local_iqr_for_mean_height ~ unique_distance'), data = spreads)
+print(iqr_mean_height$coefficients)
+std_density_curve <- nls(local_standard_deviation_for_density ~ a * unique_distance^b, start = list(a = 66519, b = -2), data = spreads)
+print(coef(std_density_curve))
+std_density_function <- function(x) {
+  return (coef(std_density_curve)[[1]] * x^coef(std_density_curve)[[2]])
+}
+
+## uncomment to view measures of spread at different distances
+#print(spreads)
+ggplot(data = spreads, aes(spreads$unique_distance, spreads$local_iqr_for_mean_height)) + 
+  geom_point() +
+  geom_abline(slope = iqr_mean_height$coefficients[[2]], intercept = iqr_mean_height$coefficients[[1]])
+ggplot(data = spreads, aes(spreads$unique_distance, spreads$local_standard_deviation_for_density)) +
+  geom_point() + 
+  stat_function(fun = std_density_function)
+ggplot(data = spreads, aes(spreads$unique_distance, spreads$local_standard_deviation_for_pct_points)) + 
+  geom_point() +
+  geom_abline(slope = std_pct_points_line$coefficients[[2]], intercept = std_pct_points_line$coefficients[[1]])
+
 
 ## loop through the three input folders
 for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folder)) {
