@@ -19,6 +19,7 @@ voxel_width <- 0.5
 
 ## initialize empty output data frame to be populated later
 output <- data.frame(
+  macroplot = numeric(),
   clip.plot.name = character(),
   distance = numeric(),
   raw_mean_height = numeric(),
@@ -69,6 +70,8 @@ std_density_function <- function(x) {
 #  geom_point() +
 #  geom_abline(slope = std_pct_points_line$coefficients[[2]], intercept = std_pct_points_line$coefficients[[1]])
 
+## set a variable to track which clip plot we are on
+i <- 1
 
 ## loop through the three input folders
 for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folder)) {
@@ -78,6 +81,9 @@ for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folde
   
   ## loop through all of the files in the current folder
   for (file in files) {
+    
+    ## get the macroplot number
+    macroplot <- i
     
     ## get the clip plot's name
     clip.plot.name <- str_extract(file, "\\/(\\S{2,5})\\.las", group = 1)
@@ -131,6 +137,7 @@ for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folde
     
     ## create a new row with the values from the clip plot
     new_row <- data.frame(
+      macroplot = macroplot,
       clip.plot.name = clip.plot.name,
       distance = this.distance,
       raw_mean_height = mean_height,
@@ -147,7 +154,10 @@ for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folde
     output <- rbind(output, new_row)
     
   }
-    
+  
+  # increment the macroplot number
+  i <- i + 1  
+  
 }
 
 ## uncomment to see the output
