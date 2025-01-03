@@ -110,8 +110,16 @@ for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folde
     flattened_stratum2_point_density <- stratum2_point_density - point_density_formula(this.distance)
     
     
+    ## find local measures of spread
+    local_iqr_mean_height <- iqr_mean_height$coefficients[[1]] + iqr_mean_height$coefficients[[2]] * this.distance
+    local_std_pct_points <- std_pct_points_line$coefficients[[1]] + std_pct_points_line$coefficients[[2]] * this.distance 
+    local_std_density <- coef(std_density_curve)[[1]] * this.distance^coef(std_density_curve)[[2]]
     
     
+    ## find standardized structural variables
+    standardized_mean_height <- flattened_mean_height / local_iqr_mean_height
+    standardized_pct_points_stratum2 <- flattened_pct_points_stratum2 / local_std_pct_points
+    standardized_stratum2_point_density <- flattened_stratum2_point_density / local_std_density
     
     
     ## create a new row with the values from the clip plot
@@ -123,7 +131,10 @@ for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folde
       stratum2_point_density = stratum2_point_density,
       flattened_mean_height = flattened_mean_height,
       flattened_pct_points_stratum2 = flattened_pct_points_stratum2,
-      flattened_stratum2_point_density = flattened_stratum2_point_density
+      flattened_stratum2_point_density = flattened_stratum2_point_density,
+      standardized_mean_height = standardized_mean_height,
+      standardized_pct_points_stratum2 = standardized_pct_points_stratum2,
+      standardized_stratum2_point_density = standardized_stratum2_point_density
     )
     ## add the new row to the output data frame
     output <- rbind(output, new_row)
