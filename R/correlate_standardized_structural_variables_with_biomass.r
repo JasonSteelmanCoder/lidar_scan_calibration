@@ -14,33 +14,27 @@ combined_data <- merge(structural_variables, biomasses, by.x = c("macroplot", "c
 ## loop through the different kinds of biomass, comparing biomass to density in stratum 2
 for (i in 13:25) {
   print(names(combined_data)[i])
-  print(combined_data[, i])
-  plot(
-      combined_data$standardized_stratum2_point_density, 
-      combined_data[, i], 
-      main = paste(names(combined_data)[i], "standardized stratum2 point density")
-  )
+  print(cor(combined_data$standardized_stratum2_point_density, combined_data[, i]))
+  #print(combined_data[, i])
+  print("")
+  plot(combined_data$standardized_stratum2_point_density, combined_data[, i], main = paste(names(combined_data)[i], "standardized stratum2 point density"))
 }
 
 ## loop through the different kinds of biomass, comparing biomass to percent points in stratum 2
 for (i in 13:25) {
   print(names(combined_data)[i])
-  print(combined_data[, i])
-  plot(
-      combined_data$standardized_pct_points_stratum2, 
-      combined_data[, i], 
-      main = paste(names(combined_data)[i], "standardized pct points stratum2")
-  )
+  print(cor(combined_data$standardized_pct_points_stratum2, combined_data[, i]))
+  #print(combined_data[, i])
+  print("")
+  plot(combined_data$standardized_pct_points_stratum2, combined_data[, i], main = paste(names(combined_data)[i], "standardized pct points stratum2"))
 }
 
 ## loop through the different kinds of biomass, comparing biomass to mean height
 for (i in 13:25) {
   print(names(combined_data)[i])
-  print(combined_data[, i])
-  plot(
-      combined_data$standardized_mean_height, 
-      combined_data[, i], 
-      main = paste(names(combined_data)[i], "standardized mean height")
-  )
+  print(cor(combined_data$standardized_mean_height, combined_data[, i]))
+  #print(combined_data[, i])
+  print("")
+  plot(combined_data$standardized_mean_height, combined_data[, i], main = paste(names(combined_data)[i], "standardized mean height"))
 }
 
