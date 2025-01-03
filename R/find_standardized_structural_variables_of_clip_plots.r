@@ -2,13 +2,17 @@ require(lidR)
 require(stringr)
 require(ggplot2)
 
-## grab data
+## USER: put the folders containing clip plot lidar files here
 m1_clip_plots_folder <- "C:/Users/js81535/Desktop/lidar_scan_calibration/clip_plot_las1"
 m2_clip_plots_folder <- "C:/Users/js81535/Desktop/lidar_scan_calibration/clip_plot_las2"
 m3_clip_plots_folder <- "C:/Users/js81535/Desktop/lidar_scan_calibration/clip_plot_las3"
 
+## USER: put the path to the local measurements of spread csv here
 spreads.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/local_measurements_of_spread_for_structural_variables.csv"
 spreads <- read.csv(spreads.path)
+
+## USER: put the pathe to your output folder here
+output.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/standardized_structural_variables_of_clip_plots.csv"
 
 ## set up variables
 voxel_width <- 0.5
@@ -17,12 +21,15 @@ voxel_width <- 0.5
 output <- data.frame(
   clip.plot.name = character(),
   distance = numeric(),
-  mean_height = numeric(),
-  pct_points_stratum2 = numeric(),
-  stratum2_point_density = numeric(),
+  raw_mean_height = numeric(),
+  raw_pct_points_stratum2 = numeric(),
+  raw_stratum2_point_density = numeric(),
   flattened_mean_height = numeric(),
   flattened_pct_points_stratum2 = numeric(),
-  flattened_stratum2_point_density = numeric()
+  flattened_stratum2_point_density = numeric(),
+  standardized_mean_height = numeric(),
+  standardized_pct_points_stratum2 = numeric(),
+  standardized_stratum2_point_density = numeric()
 )
 
 ## set up trend-line formulas. 
@@ -126,9 +133,9 @@ for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folde
     new_row <- data.frame(
       clip.plot.name = clip.plot.name,
       distance = this.distance,
-      mean_height = mean_height,
-      pct_points_stratum2 = pct_points_stratum2,
-      stratum2_point_density = stratum2_point_density,
+      raw_mean_height = mean_height,
+      raw_pct_points_stratum2 = pct_points_stratum2,
+      raw_stratum2_point_density = stratum2_point_density,
       flattened_mean_height = flattened_mean_height,
       flattened_pct_points_stratum2 = flattened_pct_points_stratum2,
       flattened_stratum2_point_density = flattened_stratum2_point_density,
@@ -146,34 +153,37 @@ for (folder in c(m1_clip_plots_folder, m2_clip_plots_folder, m3_clip_plots_folde
 ## uncomment to see the output
 print(output)
 
+## uncomment to save the output to file
+#write.csv(output, output.path, row.names = FALSE)
+
 ## uncomment to see the standardization process visualized
-ggplot(data = output, aes(distance, mean_height)) + 
-  geom_point() + 
-  geom_hline(yintercept = 0)
-ggplot(data = output, aes(distance, flattened_mean_height)) + 
-  geom_point() + 
-  geom_hline(yintercept = 0)
-ggplot(data = output, aes(distance, standardized_mean_height)) + 
-  geom_point() + 
-  geom_hline(yintercept = 0)
+#ggplot(data = output, aes(distance, mean_height)) + 
+#  geom_point() + 
+#  geom_hline(yintercept = 0)
+#ggplot(data = output, aes(distance, flattened_mean_height)) + 
+#  geom_point() + 
+#  geom_hline(yintercept = 0)
+#ggplot(data = output, aes(distance, standardized_mean_height)) + 
+#  geom_point() + 
+#  geom_hline(yintercept = 0)
 
-ggplot(data = output, aes(distance, pct_points_stratum2)) + 
-  geom_point() +
-  geom_hline(yintercept = 0)
-ggplot(data = output, aes(distance, flattened_pct_points_stratum2)) + 
-  geom_point() +
-  geom_hline(yintercept = 0)
-ggplot(data = output, aes(distance, standardized_pct_points_stratum2)) + 
-  geom_point() +
-  geom_hline(yintercept = 0)
+#ggplot(data = output, aes(distance, pct_points_stratum2)) + 
+#  geom_point() +
+#  geom_hline(yintercept = 0)
+#ggplot(data = output, aes(distance, flattened_pct_points_stratum2)) + 
+#  geom_point() +
+#  geom_hline(yintercept = 0)
+#ggplot(data = output, aes(distance, standardized_pct_points_stratum2)) + 
+#  geom_point() +
+#  geom_hline(yintercept = 0)
 
-ggplot(data = output, aes(distance, stratum2_point_density)) +
-  geom_point() + 
-  geom_hline(yintercept = 0)
-ggplot(data = output, aes(distance, flattened_stratum2_point_density)) +
-  geom_point() + 
-  geom_hline(yintercept = 0)
-ggplot(data = output, aes(distance, standardized_stratum2_point_density)) +
-  geom_point() + 
-  geom_hline(yintercept = 0)
+#ggplot(data = output, aes(distance, stratum2_point_density)) +
+#  geom_point() + 
+#  geom_hline(yintercept = 0)
+#ggplot(data = output, aes(distance, flattened_stratum2_point_density)) +
+#  geom_point() + 
+#  geom_hline(yintercept = 0)
+#ggplot(data = output, aes(distance, standardized_stratum2_point_density)) +
+#  geom_point() + 
+#  geom_hline(yintercept = 0)
 
