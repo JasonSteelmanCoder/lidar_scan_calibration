@@ -24,29 +24,46 @@ print(input_data)
 types_per_plot = int(len(input_data) / 3)
 
 # plot the curves for each individual type of biomass (not for totals)
-plt.figure()
+
+plt.figure() 
+
+## loop through the three macroplots
 for i in range(3):
+
+    ## loop through the different types of biomass
     for j in range(types_per_plot):
 
+        ## select the biomass types, leaving out totals
         biomass_type = input_data.iloc[j + i * types_per_plot, 1]
         if biomass_type != 'total_biomass' and biomass_type != 'fine_dead_fuels':
 
+            ## set up variables for calculation
             Z = 1.96            # 95% confidence interval
             sigma = input_data.iloc[j + i * types_per_plot, 3]          # the standard deviation of the biomass on observed clip plots
 
+            ## set up the x axis (the number of clip plots taken, from 1-24)
             n = np.linspace(1, 24, 24)
-            margin_of_error = (Z * sigma) / np.sqrt(n)            # calculate half the width of a 95% confidence interval
+
+            ## calculate the margin of error curve
+            margin_of_error = (Z * sigma) / np.sqrt(n)            # half the width of a 95% confidence interval
             if margin_of_error[1] != 0:                     # filter out curves that have no data
+                
+                ## find the (x + y) curve 
+                ## this will allow us to find the optimal number of clip plots to take
                 sum_xy = n + margin_of_error
 
-                plt.subplot(1, 3, i + 1)                 # make three plots on one panel
+                ## make three plots on one panel
+                plt.subplot(1, 3, i + 1)                 
+                
+                ## plot the margin of error
                 plt.plot(n, margin_of_error, label = input_data.iloc[j + i * types_per_plot, 1], color=colors[j])
 
+                ## calculate and plot the optimal point on the margin of error curve
                 optimal_x = sum_xy.argmin() + 1
                 optimal_y = margin_of_error[sum_xy.argmin()]
                 plt.plot(optimal_x, optimal_y, 'o', color=colors[j], alpha=0.5)     # plots the tip of the elbow
 
-    ## plot the elbow curves
+    ## style the figure
     plt.suptitle("Margin of Error For The Est'd Mean Biomass Per 1/4 m^2")
     plt.title(f"Macroplot {input_data.iloc[j + i * types_per_plot, 0]}")
     point_label = Line2D([0], [0], marker='o', color='w', markerfacecolor='grey', alpha=0.5)
@@ -64,31 +81,46 @@ for i in range(3):
 plt.tight_layout(w_pad=-2)
 plt.show()
 
-## plot the curve for totals (total_biomass and fine_dead_fuels)
+## plot the curves for totals (total_biomass and fine_dead_fuels)
+
 plt.figure()
+
+## loop through the macroplots
 for i in range(3):
+
+    ## loop through the types of biomass
     for j in range(types_per_plot):
 
+        ## grab the biomass types for totals categories
         biomass_type = input_data.iloc[j + i * types_per_plot, 1]
         if biomass_type == 'total_biomass' or biomass_type == 'fine_dead_fuels':
 
+            ## set up variables for the calculation
             Z = 1.96            # 95% confidence interval
             sigma = input_data.iloc[j + i * types_per_plot, 3]          # the standard deviation of the biomass on observed clip plots
 
+            ## set the x axis (the number of clip plots taken from 1 to 24)
             n = np.linspace(1, 24, 24)
+
+            ## calculate the margin of error curve
             margin_of_error = (Z * sigma) / np.sqrt(n)            # calculate *half* the width of a 95% confidence interval
+
+            ## calculate the (x + y) curve
+            ## this will help us find the optimal number of clip plots to take
             sum_xy = n + margin_of_error
 
+            ## plot the margin of error elbow curves
             plt.subplot(1, 3, i + 1)                 # make three plots on one panel
             plt.plot(n, margin_of_error, label = input_data.iloc[j + i * types_per_plot, 1], color=colors[j])
 
+            ## calculate and plot the optimal point on the margin of error curve
             optimal_x = sum_xy.argmin() + 1
             optimal_y = margin_of_error[sum_xy.argmin()]
             if optimal_x != 24:                                                 # when optimal_x = 24, the optimal x is actually outside the range of the curve and shouldn't be plotted
                 plt.plot(optimal_x, optimal_y, 'o', color=colors[j], alpha=0.5)     # plots the tip of the elbow
                 plt.text(optimal_x + 0.5, optimal_y + 0.5, f"{int(optimal_x)}")
 
-    ## plot the curve
+    ## style the figure
     plt.suptitle("Margin of Error For The Est'd Mean Biomass Per 1/4 m^2")
     plt.title(f"Macroplot {input_data.iloc[j + i * types_per_plot, 0]}")
     point_label = Line2D([0], [0], marker='o', color='w', markerfacecolor='grey', alpha=0.5)
