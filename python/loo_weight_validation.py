@@ -1,6 +1,6 @@
-## This program checks the effectiveness of the weights matrix by estimating the biomass of a macroplot using all but one of the clip plot values. 
+## This program checks the effectiveness of the weights matrix by estimating the average biomass of a macroplot using all but one of the clip plot values. 
 ## This is first performed using the unweighted biomasses, then the weighted biomasses. 
-## The weighted biomasses should do a better job thatn the unweighted ones at estimating the macroplot biomass with missing data.
+## The weighted biomasses should do a better job than the unweighted ones at estimating the average macroplot biomass with data missing.
 
 import os
 from dotenv import load_dotenv
