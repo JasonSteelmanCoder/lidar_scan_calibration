@@ -1,5 +1,5 @@
 # for each unique combination of macroplot and biomass type, this script saves an elbow plot showing the width of the confidence interval for different numbers
-# of clip plots, along with a histogram showing the sample mean and the distribution of probable actual population means. The purpose of the figures is to give 
+# of clip plots taken, along with a histogram showing the sample mean and the distribution of probable actual population means. The purpose of the figures is to give 
 # an intuitive sense of how precise (or inprecise) our estimations of biomass are.
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
@@ -20,16 +20,28 @@ samples_simulated = 5
 input_data = pd.read_csv(input_data_path)
 # print(input_data)
 
+## loop through the unique combinations of macroplot and biomass type
 for i in range(39):
+
+    ## set up to have two plots of different sizes on the same figure
     fig = plt.figure(figsize=[9, 11])
     gs = gridspec.GridSpec(3, 1)
 
+    ## set variables for calculation
     Z = 1.96            # 95% confidence interval
     sigma = input_data.iloc[i, 3]          # the standard deviation of the biomass on observed clip plots
 
+    ## set up the x axis (the number of clip plots taken, between 1 and 24)
     n = np.linspace(1, 24, 24)
+
+    ## calculate the margin of error curve
     margin_of_error = (Z * sigma) / np.sqrt(n)
+
+    ## find the (x + y) curve
+    ## this will be useful for finding the optimal number of clip plots to take
     sum_xy = n + margin_of_error
+
+    ## plot the elbow curve for margin of error
 
     ax1 = fig.add_subplot(gs[0:2, :])
     plt.suptitle(f"{input_data.iloc[i, 1]} Macroplot {input_data.iloc[i, 0]}")
@@ -61,6 +73,7 @@ for i in range(39):
         plt.xlabel("Number of Clip Plots")
         plt.axis('equal')
 
+    ## plot a histogram with the sample mean and distribution of possible true values
     ax2 = fig.add_subplot(gs[2, :])
     plt.title(f"Distribution of Possible\nTrue Means With {samples_simulated} Clip Plots")
     if margin_of_error[0] == 0:
