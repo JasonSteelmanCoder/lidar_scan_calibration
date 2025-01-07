@@ -7,8 +7,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 
+## USER: put the path to your output folder here
+## You will have to uncomment a section near the end of the script to actually save to the output to file 
 output_path = f'C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration'
 
+## these coordinates are based on the cardinal directions and the distances of the clip plots from macroplot center.
+## they are not yet adjusted for clip plot center (which is 0.25 cm further from the origin)
 coordinate_pairs = [
 (2,0),
 (2.5,0),
@@ -36,6 +40,7 @@ coordinate_pairs = [
 (-5,0),
 ]
 
+## these are the names of the clip plots
 point_names = [
     "e2",
     "e2.5",
@@ -63,12 +68,17 @@ point_names = [
     "w5"
 ]
 
+## these are the degrees of rotation from the macroplot coordinates (where north is vertical up) to the lidar scan coordinates (where north is an arbitrary direction)
 degrees_rotation = [104.8, -0.6, 134.2]
 
+## loop through the macroplots
 for i in range(3):
+
+    ## set variables
     macroplot_num = str(i + 1)
     rotation_angle = degrees_rotation[i] * (math.pi / 180)      # in radians
 
+    ## set variables to use in rotation matrices
     a = math.cos(rotation_angle)
     b = -1 * math.sin(rotation_angle)
     c = math.sin(rotation_angle)
@@ -96,7 +106,7 @@ for i in range(3):
     outer_right_c = math.sin(315 * (math.pi / 180))
     outer_right_d = math.cos(315 * (math.pi / 180))
 
-
+    ## set up empty data structures to be populated later
     new_macroplot = {}
     new_xs = []
     new_ys = []
@@ -109,7 +119,10 @@ for i in range(3):
     outer_right_xs = []
     outer_right_ys = []
 
+    ## loop through the clip plots
     for i in range(24):
+
+        ## grab the details of the current clip plot
         point = coordinate_pairs[i]
 
         nominal_old_x = point[0]
@@ -202,11 +215,13 @@ for i in range(3):
     for value in new_macroplot.values():
         print(value)
 
-    file_name = f'coordinates_macroplot{macroplot_num}'
-    output_location = os.path.join(output_path, f'{file_name}.json')
+    ## uncomment to save the output to file
+    # file_name = f'coordinates_macroplot{macroplot_num}'
+    # output_location = os.path.join(output_path, f'{file_name}.json')
     # with open(output_location, 'w') as output:
     #     json.dump(new_macroplot, output)
 
+    ## plot the output
     plt.scatter(new_xs, new_ys)
     plt.scatter(outer_left_xs, outer_left_ys, color='orange')
     plt.scatter(inner_left_xs, inner_left_ys, color='orange')
