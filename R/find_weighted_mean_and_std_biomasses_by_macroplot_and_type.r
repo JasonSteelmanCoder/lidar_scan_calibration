@@ -69,21 +69,28 @@ weighted_standard_deviation <- c()
 # populate output columns
 for (i in 1:39) {              # there are 33 unique combinations of macroplot and biomass type, plus 3 rows for total_biomass and 3 for fine_dead_fuels
   
+  ## select only the data for the current macroplot and biomass type
   weighted_biomass_values <- subset(weighted_masses_df, Macroplot == macroplot[[i]], select = biomass_type[[i]])
   weights <- subset(input_weights, Macroplot == macroplot[[i]], select = biomass_type[[i]])
+
   if (sum(weights) == 0) {
     this_mean <- 0          # prevent divide by zero
   } else {
-    this_mean <- sum(weighted_biomass_values) / sum(weights)
+    this_mean <- sum(weighted_biomass_values) / sum(weights)    # calculate weighted  mean biomass 
   }
+  
+  ## append the weighted mean biomass to the existing list
   weighted_mean_biomass <- c(weighted_mean_biomass, this_mean)
   
+  ## grab only the data for the current macroplot and biomass type
   biomass_values <- subset(by_clip_plot_df, Macroplot == macroplot[[i]], select = biomass_type[[i]])
+
+  ## find the weighted standard deviation
   weighted_squared_differences_from_mean <- weights * (biomass_values - this_mean)^2
   if (sum(weights) == 0) {
-    variance <- 0
+    variance <- 0       # prevent divide by zero
   } else {
-    variance <- (sum(weighted_squared_differences_from_mean)) / sum(weights)    
+    variance <- (sum(weighted_squared_differences_from_mean)) / sum(weights)    # calculate weighted variance
   }
   standard_dev <- sqrt(variance)
   weighted_standard_deviation <- c(weighted_standard_deviation, standard_dev)
