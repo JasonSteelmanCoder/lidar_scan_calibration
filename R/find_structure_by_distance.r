@@ -107,7 +107,7 @@ for (folder in c(source.folder1, source.folder2, source.folder3)) {
 }
 
 ## uncomment to print the output table
-#print(output)
+print(output)
 
 ## uncomment to save the results to file
 #write.csv(output, output.path, row.names = FALSE)

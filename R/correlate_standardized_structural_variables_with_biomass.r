@@ -1,4 +1,3 @@
-
 ## grab the data
 structural_variables_path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/standardized_structural_variables_of_clip_plots.csv"
 structural_variables <- read.csv(structural_variables_path)
