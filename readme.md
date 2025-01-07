@@ -28,7 +28,7 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
             the westmost plot's center is (0,0)
             the line from the origin to the center of plot 2 is 29 degrees from east and the distance is 31.76
             the line from the origin to the center of plot 1 is 14 degrees from east and the distance is 29.81
-            use sin and cosin to find the ofsets for the centers of macroplots 1 and 2
+            use sin and cosin to find the offsets for the centers of macroplots 1 and 2
         offset the coordinates of plots 1 and 2 and add them to "HEF Biomass 2024 multiplot.csv" using calculate_multiplot_coordinates.py
         make multiplot variograms with multiplot_variograms.r
             these go in multiplot_variograms/ folder with names like multiplot_variograms_ETE.png
