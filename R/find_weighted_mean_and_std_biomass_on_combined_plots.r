@@ -69,10 +69,12 @@ weighted_standard_deviation <- c()
 # populate output columns
 for (i in 1:13) {              # there are 11 biomass types, plus 1 row for total_biomass and 1 for fine_dead_fuels
   
+  ## set up variables
   weighted_biomass_values <- weighted_masses_df[biomass_type[[i]]]
   
   weights <- input_weights[biomass_type[[i]]]
-  
+
+  ## calculate weighted mean for current biomass type  
   if (sum(weights) == 0) {
     this_mean <- 0          # prevent divide by zero
   } else {
@@ -81,17 +83,21 @@ for (i in 1:13) {              # there are 11 biomass types, plus 1 row for tota
   
   ## append the mean to the weighted means
   weighted_mean_biomass <- c(weighted_mean_biomass, this_mean)
-  
+
+  ## set up variables  
   biomass_values <- by_clip_plot_df[biomass_type[[i]]]
+  
+  ## find weighted standard deviation
   
   weighted_squared_differences_from_mean <- weights * (biomass_values - this_mean)^2
   
   if (sum(weights) == 0) {
-    variance <- 0
+    variance <- 0       # prevent divide by zero
   } else {
-    variance <- (sum(weighted_squared_differences_from_mean)) / sum(weights)    
+    variance <- (sum(weighted_squared_differences_from_mean)) / sum(weights)    # calculate variance
   }
   
+  ## calculate standard deviation
   standard_dev <- sqrt(variance)
   
   ## append the standard deviation to the list of standard deviations
