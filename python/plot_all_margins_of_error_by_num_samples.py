@@ -46,7 +46,7 @@ for i in range(3):
                 optimal_y = margin_of_error[sum_xy.argmin()]
                 plt.plot(optimal_x, optimal_y, 'o', color=colors[j], alpha=0.5)     # plots the tip of the elbow
 
-
+    ## plot the elbow curves
     plt.suptitle("Margin of Error For The Est'd Mean Biomass Per 1/4 m^2")
     plt.title(f"Macroplot {input_data.iloc[j + i * types_per_plot, 0]}")
     point_label = Line2D([0], [0], marker='o', color='w', markerfacecolor='grey', alpha=0.5)
@@ -60,10 +60,11 @@ for i in range(3):
     plt.xlabel("Number of Clip Plots")
     plt.xticks(range(1, 24, 2))
 
+## show all of the curves together
 plt.tight_layout(w_pad=-2)
 plt.show()
 
-# plot the curve for totals (total_biomass and fine_dead_fuels)
+## plot the curve for totals (total_biomass and fine_dead_fuels)
 plt.figure()
 for i in range(3):
     for j in range(types_per_plot):
@@ -87,7 +88,7 @@ for i in range(3):
                 plt.plot(optimal_x, optimal_y, 'o', color=colors[j], alpha=0.5)     # plots the tip of the elbow
                 plt.text(optimal_x + 0.5, optimal_y + 0.5, f"{int(optimal_x)}")
 
-
+    ## plot the curve
     plt.suptitle("Margin of Error For The Est'd Mean Biomass Per 1/4 m^2")
     plt.title(f"Macroplot {input_data.iloc[j + i * types_per_plot, 0]}")
     point_label = Line2D([0], [0], marker='o', color='w', markerfacecolor='grey', alpha=0.5)
@@ -101,5 +102,6 @@ for i in range(3):
     plt.xlabel("Number of Clip Plots")
     plt.xticks(range(1, 24, 2))
 
+## show the curves together in one figure
 plt.tight_layout(w_pad=-2)
 plt.show()
