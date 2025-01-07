@@ -15,7 +15,7 @@ output_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibrat
 unweighted_df = pd.read_csv(unweighted_input)
 weighted_df = pd.read_csv(weighted_input)
 
-unweighted_df["total_biomass"] = unweighted_df["mean_biomass"] * 1256
+unweighted_df["total_biomass"] = unweighted_df["mean_biomass"] * 1256                   ## 1256 is the area of a macroplot divided by the area of a clip plot
 weighted_df["weighted_total_biomass"] = weighted_df["weighted_mean_biomass"] * 1256
 
 # make an output data frame to store the estimated biomasses
