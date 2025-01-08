@@ -22,7 +22,7 @@ for (i in 13:25) {
   print(cor(combined_data$standardized_stratum2_point_density, combined_data[, i]))
   #print(combined_data[, i])
   print("")
-  plot(combined_data$standardized_stratum2_point_density, combined_data[, i], main = paste(names(combined_data)[i], "standardized stratum2 point density"))
+  plot(combined_data$standardized_stratum2_point_density, combined_data[, i], main = paste(names(combined_data)[i], "standardized stratum 2 point density"), xlab = "standardized stratum 2 point density score", ylab = paste(names(combined_data)[i], "biomass (g)"))
 }
 
 ## loop through the different kinds of biomass, comparing biomass to percent points in stratum 2
@@ -31,7 +31,7 @@ for (i in 13:25) {
   print(cor(combined_data$standardized_pct_points_stratum2, combined_data[, i]))
   #print(combined_data[, i])
   print("")
-  plot(combined_data$standardized_pct_points_stratum2, combined_data[, i], main = paste(names(combined_data)[i], "standardized pct points stratum2"))
+  plot(combined_data$standardized_pct_points_stratum2, combined_data[, i], main = paste(names(combined_data)[i], "standardized pct points stratum 2"), xlab = "standardized pct points stratum 2 score", ylab = paste(names(combined_data)[i], "biomass (g)"))
 }
 
 ## loop through the different kinds of biomass, comparing biomass to mean height
@@ -40,6 +40,6 @@ for (i in 13:25) {
   print(cor(combined_data$standardized_mean_height, combined_data[, i]))
   #print(combined_data[, i])
   print("")
-  plot(combined_data$standardized_mean_height, combined_data[, i], main = paste(names(combined_data)[i], "standardized mean height"))
+  plot(combined_data$standardized_mean_height, combined_data[, i], main = paste(names(combined_data)[i], "standardized mean height"), xlab = "standardized mean height score", ylab = paste(names(combined_data)[i], "biomass (g)"))
 }
 
