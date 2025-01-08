@@ -12,7 +12,7 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
 
 # Steps and Details
     Find Moran's I
-        find moran's I for one biomass type using __calculate_morans_i.py__ 
+        find moran's I for one biomass type using <b>calculate_morans_i.py</b> 
             set autocorrelation range (None to use IDW, int to use binary matrix)
         find moran's I for all biomasses using calculate_all_morans_i.py (still under construction!) (may need updating for adjusted clip plot centers)
 
