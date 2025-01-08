@@ -142,7 +142,7 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
             use a rotation matrix from linear algebra to orient the edges of the clip plot
         find standardization formulas and values at different distances by following "find variograms for lidar scan structural variance" above
             especially correlate_structure_and_distance.py. see "standardize structural variables and plot the relationship...etc" above
-        get raw structural variables from clip plots and standardize it with find_standardized_structurala_variables.r
+        get raw structural variables from clip plots and standardize it with find_standardized_structural_variables.r
             makes standardized_structural_variables_of_clip_plots.csv
         plot biomasses versus structural variables and calculate correlation coefficients using correlate_standardized_structural_variables_with_biomass.r
             makes plots in memory and prints correlation coefficients
@@ -154,7 +154,7 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
             makes standardized_structural_variables_of_voxels.csv
             plots are made in memory
             also makes local_measurements_of_spread_for_structural_variables.csv
-        get raw structural variables from clip plots and standardize it with find_standardized_structurala_variables.r
+        get raw structural variables from clip plots and standardize it with find_standardized_structural_variables.r
             makes standardized_structural_variables_of_clip_plots.csv
         plot biomasses versus structural variables and calculate correlation coefficients using correlate_standardized_structural_variables_with_biomass.r
             makes plots in memory and prints correlation coefficients

@@ -1,3 +1,9 @@
+## For input, this program takes cropped lidar scans of clip plots, as well as a csv file 
+## containing local measurements of spread (i.e. standard deviation, interquartile range) 
+## for structural variables at different ranges from the scanner. 
+## It uses the standardization models derived in correlate_structure_and_distance.py to 
+## standardize the structural variable values of actual clip plots.
+
 require(lidR)
 require(stringr)
 require(ggplot2)
@@ -11,7 +17,7 @@ m3_clip_plots_folder <- "C:/Users/js81535/Desktop/lidar_scan_calibration/clip_pl
 spreads.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/local_measurements_of_spread_for_structural_variables.csv"
 spreads <- read.csv(spreads.path)
 
-## USER: put the pathe to your output folder here
+## USER: put the path to your output folder here
 output.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/standardized_structural_variables_of_clip_plots.csv"
 
 ## set up variables
