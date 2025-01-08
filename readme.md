@@ -125,7 +125,7 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
                 includes tree-bole pixels
         choose structural variables based on Louise's paper 
             see end of spatial_variation_scratch.txt for selections
-        find distance and structural variables of segmented voxels using find_structure_by_distance.R
+        find distance and structural variables of segmented voxels using find_structure_by_distance.r
             makes structural_variance_with_distance.csv
         standardize structural variables and plot the relationship between distance from plot center and structural variables with correlate_structure_and_distance.py
             makes standardized_structural_variables_of_voxels.csv
