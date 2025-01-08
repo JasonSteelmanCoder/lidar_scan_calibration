@@ -11,18 +11,18 @@ Goals of the project include:
 Below, I enumerate the steps that I took to further these goals. The steps are organized by indentation. The leftmost layer of indentation represents intermediate goals. Below and to the right of those goals, you will find the steps taken. Most of those steps include the name of a script that was used to accomplish the goal. Where that script produced an output in the form of a file or several files, those are named in the third level of indentation, along with any important notes about the step.
 
 # Steps and Details
-- Find Moran's I
+Find Moran's I
     - find moran's I for one biomass type using calculate_morans_i.py 
         - set autocorrelation range (None to use IDW, int to use binary matrix)
     - find moran's I for all biomasses using calculate_all_morans_i.py (still under construction!) (may need updating for adjusted clip plot centers)
 
-- Make variogram panels
+Make variogram panels
     - -- test coordinates with demonstrate_coordinate_system.py --
     - adjust the coordinates to be at the center of the clip plots with find_adjusted_coordinates.py
     - make variogram panels with semivariogram_automap_2.r
         - they go in the variogram_panels/ folder with names like variograms_CL.png
 
-- Make multi-plot variograms
+Make multi-plot variograms
     - measure distance from center to center using the measuring tool in ArcGIS Pro on the blk_biomass shapefile 
     - do the math for the coordinate system   
         - the westmost plot's center is (0,0)
@@ -35,7 +35,7 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
     - make multiplot variogram for total biomass with multiplot_variograms_total.r
         - it goes in multiplot_variograms/ folder with the name multiplot_variograms_total.biomass.png
 
-- Make all-strata multi-plot variograms
+Make all-strata multi-plot variograms
     - merge strata and make a multiplot variogram using multiplot_all_strata_variograms.r
         - they go in the all_strata_variograms/ folder with names like all_strata_CL.png
     - make an all-strata multi-plot variogram for total biomass using multiplot_all_strata_variogram_total.r
@@ -43,25 +43,25 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
     - make an all-strata multi-plot variogram for fine_dead_fuels using multiplot_all_strata_variogram_fine_dead_fuels.r
         - it goes in all_strata_variograms/ with the name all_strata_finedeadfuels.png
     
-- Make all-strata single-macroplot variograms
+Make all-strata single-macroplot variograms
     - make a unique variogram for each pair of macroplot and biomass type, combining strata into one value using all_strata_by_macroplot_variograms.r
         - this will also make a variogram for total biomass and fine_dead_fuels on each macroplot
         - variograms are saved under all_strata_by_macroplot_variograms/ with names like macroplot1_CL.png 
 
-- Calculate weights
+Calculate weights
     - get weights matrix for mean and std biomasses using find_all_weights_matrices_for_weighted_mean_biomass.py
         - use it to make clip_plot_weights.csv
         - this will also include weights for total_biomass and fine_dead_fuels on each macroplot
     - get weights matrix for all macroplots combined using find_weights_matrix_for_mean_biomass_on_combined_macroplots.py
         - use it to make weights_for_combined_macroplots.csv
 
-- Validate weights
+Validate weights
     - get weighted masses and combined-strata masses from find_weighted_mean_and_std_biomasses_by_macroplot_and_type.r
         - that's not the primary purpose of the script, but it's a good side effect
         - use it to make biomasses_with_strata_combined.csv and weighted_masses.csv
     - compare LOO weighted and unweighted using loo_weight_validation.py
     
-- Find mean and std of biomasses (weighted and unweighted)
+Find mean and std of biomasses (weighted and unweighted)
     - find (unweighted) mean and standard of biomasses for each unique combination of macroplot and biomass type with find_mean_and_std_biomasses_by_macroplot_and_type.r
         - use it to make mean_and_std_biomasses_by_macroplot_and_type.csv
 
@@ -72,7 +72,7 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
     - find weighted mean and standard of biomasses on combined macroplots using find_weighted_mean_and_std_biomass_oncombined_plots.r
         - use it to make weighted_mean_and_std_biomasses_on_combined_macroplots.csv
 
-- Find margins of error (elbow plots) (previously width of confidence intervals) (helps us determine number of clip plots needed per macroplot)
+Find margins of error (elbow plots) (previously width of confidence intervals) (helps us determine number of clip plots needed per macroplot)
     - make sure you have found the mean and std of biomasses (see above)
     - find autocorrelation ranges of each biomass type for combined high and low strata using multiplot_all_strata_variograms.r (and multiplot_all_strata_variogram_total.r)
         - (read the ranges from the variograms)
@@ -88,17 +88,17 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
     - make elbow plots for the combined macroplots using plot_margins_of_error_for_combined_plots.py
         - plots graphs in memory            
 
-- Estimate macroplot biomasses from means
+Estimate macroplot biomasses from means
     - estimate weighted and unweighted biomasses for each combination of macroplot and biomass type with estimate_macroplot_biomasses.py
         - use it to make macroplot_biomass_estimations.csv
 
-- Krige the macroplot
+Krige the macroplot
     - krige plots using krige.R
         - it will make kriged_biomass_estimations.csv
         - it will make kriged plot images and save them in kriged_images/ as .png files
     - do LOO validation of kriging with loo_validation_kriging.r
 
-- Cut out individual clip plots from lidar scans
+Cut out individual clip plots from lidar scans
     - use macroplot photos to find north in the lidar scans
         - photos are in box
         - my conclusions are recorded on pages 8-9 of my notebook
@@ -108,7 +108,7 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
         - creates folders clip_plot_las1, 2, and 3
         - with files like e2.las
 
-- Find variograms for lidar scan structural variance
+Find variograms for lidar scan structural variance
     - classify ground points, normalize macroplots, remove tree stems, and crop heights with find_ground.r
         - notes: 
             - the intelimon settings for csf seemed odd - ground points were up to 0.5m from the cloth
@@ -136,7 +136,7 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
     - make variograms from structural variables of combined macroplots using make_variograms_from_combined_standardized_structural_variables.r 
         - manually saved variogram plots to variograms_of_lidar_structural_variables/ with names like combined_macroplots_mean_height.png
     
-- Model the biomass of clip plots based on the lidar scan
+Model the biomass of clip plots based on the lidar scan
     - find north based on photos (results in notebook, page 8)
     - use north to cut out clip plots from the lidar scan
         - use a rotation matrix from linear algebra to orient the edges of the clip plot
@@ -147,7 +147,7 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
     - plot biomasses versus structural variables and calculate correlation coefficients using correlate_standardized_structural_variables_with_biomass.r
         - makes plots in memory and prints correlation coefficients
 
-- Pipeline to check if a new structural variable correlates with clip plot biomass (within the 3 macroplots and 72 clip plots that we have):
+Pipeline to check if a new structural variable correlates with clip plot biomass (within the 3 macroplots and 72 clip plots that we have):
     - find structural variables (and distance) of segmented voxels using find_structure_by_distance.r
         - makes structural_variance_with_distance.csv
     - standardize structural variables and plot the relationship between distance from plot center and structural variables with correlate_structure_and_distance.py
