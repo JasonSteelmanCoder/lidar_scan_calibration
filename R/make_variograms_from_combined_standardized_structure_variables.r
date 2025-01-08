@@ -1,12 +1,17 @@
+## This program takes structural data from the lidar scans of all three macroplots, 
+## along with the coordinates of voxels in all three macroplots as input. 
+## It outputs one variogram for each type of structural variable. 
+
 library("rjson")
 library("sp")
 library("automap")
 library(dplyr)
 
-## grab the data
+## USER: put the paths to your input files here
 coordinates.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/pixel_dimensions.json"
-structural.variables.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/standardized_structural_variables.csv"
+structural.variables.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/standardized_structural_variables_of_voxels.csv"
 
+## grab the data
 coordinates <- fromJSON(file = coordinates.path)
 structural.variables <- read.csv(structural.variables.path)
 
