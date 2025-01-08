@@ -1,10 +1,16 @@
-## grab the data
+## This program makes scatter plots of standardized structural variables versus biomass for a variety
+## of biomass types. 
+## It also prints out the Pearson's correlation (r) values of those correlations
+
+## USER: put the paths to your input files here
 structural_variables_path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/standardized_structural_variables_of_clip_plots.csv"
-structural_variables <- read.csv(structural_variables_path)
 biomasses_path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/biomasses_with_strata_combined.csv"
+
+## grab the data
+structural_variables <- read.csv(structural_variables_path)
 biomasses <- read.csv(biomasses_path)
 
-## clean up some data to allow joining the data
+## clean up some variable names to allow joining the data frames
 structural_variables$clip.plot.name <- toupper(structural_variables$clip.plot.name)
 
 ## join the data into one table
