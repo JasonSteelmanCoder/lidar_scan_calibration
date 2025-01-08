@@ -1,12 +1,17 @@
+## This script makes a variogram for each unique combination of macroplot and structural variable. 
+## The variogram plots are made in memory and displayed in RStudio, 
+## however, I have manually saved copied of the to the variograms_of_lidar_structural_variables/ folder.
+
 library("rjson")
 library("sp")
 library("automap")
 library("png")
 
-## grab the data
+## USER: put the paths to pixel dimensions and structural variables input data here
 coordinates.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/pixel_dimensions.json"
-structural.variables.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/standardized_structural_variables.csv"
+structural.variables.path <- "C:/Users/js81535/Desktop/lidar_scan_calibration/csv_data/standardized_structural_variables_of_voxels.csv"
 
+## grab the data
 coordinates <- fromJSON(file = coordinates.path)
 structural.variables <- read.csv(structural.variables.path)
 

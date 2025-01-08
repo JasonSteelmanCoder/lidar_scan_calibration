@@ -131,8 +131,8 @@ Below, I enumerate the steps that I took to further these goals. The steps are o
             makes standardized_structural_variables_of_voxels.csv
             plots are made in memory
             also makes local_measurements_of_spread_for_structural_variables.csv
-        make variograms from structural variables of lidar scans with make_variograms_from_standardized_structural_variables.R
-            manually saved variogram plots to variograms_of_lidar_structural_variables/ with names like variogrma_of_mean_height_macroplot1.png
+        make variograms from structural variables of lidar scans with make_variograms_from_standardized_structural_variables.r
+            manually saved variogram plots to variograms_of_lidar_structural_variables/ with names like variogram_of_mean_height_macroplot1.png
         make variograms from structural variables of combined macroplots using make_variograms_from_combined_standardized_structural_variables.r 
             manually saved variogram plots to variograms_of_lidar_structural_variables/ with names like combined_macroplots_mean_height.png
         
