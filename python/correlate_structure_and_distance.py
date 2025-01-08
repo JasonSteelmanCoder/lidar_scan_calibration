@@ -1,3 +1,9 @@
+## This script plots the relationship between distance from plot center and structural variables
+## and then standardizes structural variables to factor out distance effects. It outputs...
+## - standardized_structural_variables_of_voxels.csv
+## - local_measurements_of_spread_for_structural_variables.csv
+## It also allows you to see plots of the relationship between range and structural variables
+
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -7,11 +13,13 @@ from scipy.optimize import curve_fit
 ## USER: put your output location here
 output_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/csv_data/standardized_structural_variables.csv"
 
-## grab the data and prepare variables
+## USER: puth the path to your input data here
 data_path = f"C:/Users/{os.getenv("MS_USER_NAME")}/Desktop/lidar_scan_calibration/csv_data/structural_variance_with_distance.csv"
 
+## grab the data
 input_data = pd.read_csv(data_path)
 
+## store data in variables for readability
 macroplots = input_data["macroplot"]
 voxel_number = input_data["voxel_number"]
 distances = input_data["distance"]
@@ -19,6 +27,7 @@ mean_heights = input_data["mean_height"]
 pct_points_stratum2 = input_data["pct_points_stratum2"]
 point_density_stratum2 = input_data["point_density_stratum2"]
 
+## initialize an output data frame with the desired rows
 output_df = pd.DataFrame({
     "macroplot": macroplots,
     "voxel_number": voxel_number,
